@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Robo Punch — RoboMaze</title>
+<link rel="icon" href="assets/robot.svg">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="punch.mjs"></script>
+</head>
+<body>
+<main>
+  <header class="top"><a href="./"><img src="assets/robot.svg" alt=""> ROBOMAZE</a><a href="./">Back to arcade</a></header>
+  <section class="cabinet">
+    <div class="bar"><span>◆ &nbsp; ROBO PUNCH</span></div>
+    <div class="dashboard">
+      <div>
+        <h2>Flick arena</h2>
+        <div class="punch-arena">
+          <video id="punch-video" playsinline muted hidden aria-hidden="true"></video>
+          <canvas id="punch-stage" width="680" height="420" role="img" aria-label="A robot inside a fixed cubicle. Finger flicks propel it into the walls."></canvas>
+        </div>
+      </div>
+      <aside>
+        <h3>Flick controls</h3>
+        <p>Touch your thumb to your index or middle fingertip, then snap that finger outward. Flick faster for a stronger hit.</p>
+        <div class="dance-actions">
+          <button class="primary" id="punch-camera" type="button">Enable camera</button>
+          <button class="secondary" id="punch-demo" type="button">Demo flick</button>
+          <button class="secondary" id="punch-reset" type="button">Reset arena</button>
+        </div>
+        <p id="punch-status" class="camera-label" role="status">Camera off</p>
+        <label for="punch-power">Last hit power <output id="punch-value">0%</output></label>
+        <progress id="punch-power" class="punch-meter" max="100" value="0"></progress>
+      </aside>
+    </div>
+  </section>
+</main>
+</body>
+</html>

@@ -66,3 +66,7 @@ For GitHub Pages hosting, set the publishing source to the root of `main` in the
 Open **Robot Arms · Dance Stage** from the arcade title screen. Pick **Arm wave**, **Side shuffle**, or **Power bounce** and start or pause the choreography. Enable the camera to link your five fingertips to the robot with yellow strings. Moving your hand changes the robot’s pose, and curling different fingers bends its arms or legs or shifts its chest light.
 
 Choose **Direct hand control** for a pose driven by hand position and finger curl. Both modes use motion-adaptive landmark smoothing to reduce jitter while responding to larger movements quickly.
+
+## Robo Punch
+
+Open **Robo Punch** and enable the camera. Touch your thumb to your index or middle fingertip, then snap that finger outward. The robot launches in the mirrored flick direction and rebounds off the fixed arena walls. Faster flicks impart more speed. **Demo flick** works without a camera.

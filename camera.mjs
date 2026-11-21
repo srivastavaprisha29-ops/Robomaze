@@ -3,7 +3,7 @@ import { createGestureControl, createHandSteering, createLandmarkFilter } from '
 const version = '0.10.22-rc.20250304';
 const packageUrl = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@' + version;
 const modelUrl = 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
-export function handCamera({ video, status, direction, state, mode, hand }) {
+export function handCamera({ video, status, direction, state, mode, hand, rawHand = false }) {
   const gesture = createGestureControl();
   const steering = createHandSteering();
   const filter = createLandmarkFilter();
@@ -35,8 +35,8 @@ export function handCamera({ video, status, direction, state, mode, hand }) {
     }
     resetGesture();
     video.srcObject = null;
-    status(message);
     state('off');
+    status(message);
   }
   async function start() {
     if (session) return;
@@ -75,8 +75,8 @@ export function handCamera({ video, status, direction, state, mode, hand }) {
           let points;
           try { [points] = tracker.detectForVideo(video, performance.now()).landmarks; }
           catch { stop('Hand tracking stopped. Try enabling the camera again.'); return; }
-          points = filter(points ?? null, now);
-          hand(points);
+          points = rawHand ? points ?? null : filter(points ?? null, now);
+          hand(points, now);
           if (!direction) status(points ? "Hand linked · move your fingers" : "Show one open hand to link the robot");
           else if (!points) {
             resetGesture();

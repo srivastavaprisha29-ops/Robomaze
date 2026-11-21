@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Robo Wars · Thumb Attack</title>
+<link rel="icon" href="assets/robot.svg">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="wars.mjs"></script>
+</head>
+<body>
+<main>
+  <header class="top"><a href="./"><img src="assets/robot.svg" alt=""> ROBOMAZE</a><a href="./">Back to arcade</a></header>
+  <section class="cabinet wars-cabinet">
+    <div class="bar"><span>◆ &nbsp; ROBO WARS</span><span>2 PLAYERS</span></div>
+    <div class="dashboard">
+      <div>
+        <h2>Thumb Attack</h2>
+        <div class="punch-arena wars-stage">
+          <video id="wars-video" playsinline muted hidden aria-hidden="true"></video>
+          <canvas id="wars-canvas" width="760" height="440" role="img" aria-label="Two selected robots face off in a tiled arena."></canvas>
+          <div id="wars-winner" role="status" hidden></div>
+        </div>
+        <p id="wars-status" role="status">Enable the camera to start.</p>
+        <label for="wars-pin">Pin hold</label>
+        <progress id="wars-pin" max="1" value="0"></progress>
+      </div>
+      <aside>
+        <h3>Set up the match</h3>
+        <div class="wars-options">
+          <label>Player 1 <select id="wars-p1"></select></label>
+          <label>Player 2 <select id="wars-p2"></select></label>
+          <label>Arena tiles
+            <select id="wars-arena">
+              <option value="metro">Midnight Metro</option>
+              <option value="garden">Jade Courtyard</option>
+              <option value="sunrise">Sunrise Dojo</option>
+            </select>
+          </label>
+          <label>Robot moves
+            <select id="wars-style">
+              <option value="hands">Hand strikes</option>
+              <option value="kick">Kicks</option>
+              <option value="sonic">Sonic blasters</option>
+            </select>
+          </label>
+        </div>
+        <div class="dance-actions">
+          <button class="primary" id="wars-camera" type="button">Enable camera</button>
+          <button class="secondary" id="wars-reset" type="button">New round</button>
+        </div>
+        <p class="hint">Clasp fingers and point both thumbs up to calibrate. Keep both wrists and thumbs visible. Hold a pin for 1.2 seconds to win.</p>
+        <details>
+          <summary>Referee controls</summary>
+          <p class="hint">Use these when a real pin is hidden from the camera.</p>
+          <button id="wars-award-1" type="button">Award Player 1</button>
+          <button id="wars-award-2" type="button">Award Player 2</button>
+        </details>
+      </aside>
+    </div>
+  </section>
+</main>
+</body>
+</html>

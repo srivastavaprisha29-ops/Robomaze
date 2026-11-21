@@ -3,7 +3,7 @@ import { createGestureControl, createHandSteering, createLandmarkFilter } from '
 const version = '0.10.22-rc.20250304';
 const packageUrl = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@' + version;
 const modelUrl = 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
-export function handCamera({ video, status, direction, state, mode, hand, rawHand = false }) {
+export function handCamera({ video, status, direction, state, mode, hand, rawHand = false, hands }) {
   const gesture = createGestureControl();
   const steering = createHandSteering();
   const filter = createLandmarkFilter();
@@ -12,7 +12,8 @@ export function handCamera({ video, status, direction, state, mode, hand, rawHan
     gesture.reset();
     steering.reset();
     filter(null, 0);
-    hand(null);
+    if (hands) hands([], performance.now());
+    else hand(null);
   }
 
   let session = null;
@@ -22,7 +23,7 @@ export function handCamera({ video, status, direction, state, mode, hand, rawHan
       const files = await FilesetResolver.forVisionTasks(packageUrl + '/wasm');
       return HandLandmarker.createFromOptions(files, {
         baseOptions: { modelAssetPath: modelUrl },
-        runningMode: 'VIDEO', numHands: 1,
+        runningMode: 'VIDEO', numHands: hands ? 2 : 1,
       });
     }).catch(error => { detectorPromise = null; throw error; });
     return detectorPromise;
@@ -72,9 +73,15 @@ export function handCamera({ video, status, direction, state, mode, hand, rawHan
           if (now - lastSample > 350) resetGesture();
           lastFrame = video.currentTime;
           lastSample = now;
-          let points;
-          try { [points] = tracker.detectForVideo(video, performance.now()).landmarks; }
+          let detected;
+          try { detected = tracker.detectForVideo(video, performance.now()).landmarks; }
           catch { stop('Hand tracking stopped. Try enabling the camera again.'); return; }
+          if (hands) {
+            hands(detected, now);
+            if (session === run) run.frame = requestAnimationFrame(tick);
+            return;
+          }
+          let [points] = detected;
           points = rawHand ? points ?? null : filter(points ?? null, now);
           hand(points, now);
           if (!direction) status(points ? "Hand linked · move your fingers" : "Show one open hand to link the robot");

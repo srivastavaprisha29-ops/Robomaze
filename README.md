@@ -80,3 +80,7 @@ Open **Robo Punch Pro** for a perspective-projected cube with six collision face
 Both Punch modes share a **Choose your robot** picker with twelve illustrated characters. The selected outfit carries between the two modes in the same browser.
 
 The Pro power tower climbs through green and yellow toward the red bell. Hits at 94% ring the bell, and hits of at least 99% trigger an animated neon maze across the cube. The demo cycles through four strengths, including an overdrive hit. Four additional designs include Gilded Deco, Jade Lotus, Ultraviolet Pixel, and Porcelain Storm.
+
+## Robo Wars · Thumb Attack
+
+Two players pick robots, tile arenas, and a move style. Clasp hands with both thumbs up to calibrate the two-hand MediaPipe tracker. A geometric pin estimate must hold for 1.2 seconds to win. Tracking loss resets the pin timer, and referee buttons resolve physical pins the webcam cannot see. The pin rule is adapted from the [World Thumb Wrestling Championships](https://www.thumbwrestling.co.uk/thumb-wrestling-rules).

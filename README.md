@@ -78,3 +78,5 @@ Choose Rose Prism, Obsidian, Crimson Reactor, or Tidal Glass to change the arena
 Open **Robo Punch Pro** for a perspective-projected cube with six collision faces. Drag the stage or use its arrow-key controls to orbit. Camera flicks use the tracked finger's relative horizontal, vertical, and depth movement, and the demo cycles through six directions without a camera. Pick from four original procedural cube materials.
 
 Both Punch modes share a **Choose your robot** picker with twelve illustrated characters. The selected outfit carries between the two modes in the same browser.
+
+The Pro power tower climbs through green and yellow toward the red bell. Hits at 86% ring the bell, and hits of at least 95% trigger an animated neon maze across the cube. The demo cycles through four strengths, including an overdrive hit. Four additional designs include Gilded Deco, Jade Lotus, Ultraviolet Pixel, and Porcelain Storm.

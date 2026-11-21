@@ -35,8 +35,17 @@
           <button class="secondary" id="pro-demo">Demo 3D flick</button>
         </div>
         <p class="camera-label" id="pro-status" role="status">Camera off</p>
-        <label for="pro-power">Last hit power <output id="pro-value">0%</output></label>
-        <progress class="punch-meter" id="pro-power" max="100" value="0"></progress>
+        <div class="strike-score">
+          <div class="strike-label">POWER TOWER <output id="pro-value">0%</output></div>
+          <div class="strike-tower" id="strike-tower" aria-hidden="true">
+            <div class="strike-bell">BELL</div>
+            <div class="strike-track"><span id="strike-marker"></span></div>
+            <span class="strike-tier strike-red">MAX</span>
+            <span class="strike-tier strike-yellow">STRONG</span>
+            <span class="strike-tier strike-green">START</span>
+          </div>
+          <p id="strike-result" class="hint" role="status">Flick to launch the marker.</p>
+        </div>
       </aside>
     </div>
   </section>

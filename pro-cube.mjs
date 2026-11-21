@@ -3,6 +3,10 @@ export const materials = [
   { name: 'Black Monolith', design: 'Gold fractures', colors: ['#171522','#655a77','#f4bc65','#fff0b8'] },
   { name: 'Inferno Circuit', design: 'Molten circuitry', colors: ['#620620','#fa304a','#ff882b','#fff0ae'] },
   { name: 'Abyss Aquarium', design: 'Deep-sea currents', colors: ['#073c8a','#297bfc','#5feeff','#ddffff'] },
+  { name: 'Gilded Deco', design: 'Engraved brass fans', colors: ['#332019','#aa6b2b','#ffcc73','#fff0bf'] },
+  { name: 'Jade Lotus', design: 'Carved jade rosettes', colors: ['#124846','#2aa780','#a9f8bd','#eaffd3'] },
+  { name: 'Ultraviolet Pixel', design: 'Neon arcade mosaic', colors: ['#291360','#7f37cf','#f89bff','#a9ffff'] },
+  { name: 'Porcelain Storm', design: 'Cobalt cloud scrolls', colors: ['#1c428d','#d6f4ff','#12448c','#fff8e6'] },
 ];
 
 const corners = [[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]];
@@ -45,17 +49,55 @@ function artwork(ctx, index, w, h, colors) {
       polygon(ctx, [[w*.16+d,h*.09+d],[w*.84-d,h*.09+d],[w*.84-d,h*.65-d/2],[w*.58,h*.91-d],[w*.16+d,h*.68-d/2]]);
       ctx.stroke();
     }
-  } else {
+  } else if (index === 3) {
     for(let i=0;i<15;i++) {
       ctx.beginPath();
       ctx.moveTo(0,i*17);
       ctx.bezierCurveTo(w*.32,i*17-72,w*.65,i*17+67,w,i*17-15);
       ctx.stroke();
     }
+  } else if (index === 4) {
+    for (const [x,y] of [[55,188],[165,188],[110,109],[55,30],[165,30]]) {
+      ctx.beginPath();
+      for (let ray=0;ray<=8;ray++) {
+        const angle=Math.PI+ray*Math.PI/8;
+        ctx.moveTo(x,y);ctx.lineTo(x+Math.cos(angle)*45,y+Math.sin(angle)*45);
+      }
+      ctx.stroke();
+      ctx.beginPath();ctx.arc(x,y,45,Math.PI,2*Math.PI);ctx.stroke();
+    }
+  } else if (index === 5) {
+    for(const [x,y] of [[110,110],[23,23],[197,23],[23,197],[197,197]]) {
+      ctx.save();ctx.translate(x,y);
+      for(let petal=0;petal<8;petal++){
+        ctx.rotate(Math.PI/4);
+        ctx.beginPath();ctx.moveTo(0,0);
+        ctx.quadraticCurveTo(-24,-24,0,-49);
+        ctx.quadraticCurveTo(24,-24,0,0);ctx.stroke();
+      }
+      ctx.restore();
+    }
+  } else if (index === 6) {
+    for(let y=0;y<11;y++)for(let x=0;x<11;x++){
+      if ((x*7+y*11)%9>3)continue;
+      ctx.fillStyle=colors[(x+y)%3+1];
+      ctx.fillRect(x*20+3,y*20+3,14,14);
+    }
+    ctx.strokeRect(32,32,156,156);ctx.strokeRect(65,65,90,90);
+  } else {
+    for(let i=0;i<5;i++){
+      ctx.beginPath();ctx.moveTo(0,22+i*44);
+      for(let j=0;j<4;j++){
+        const x=j*55,y=22+i*44;
+        ctx.bezierCurveTo(x+10,y-33,x+46,y-33,x+43,y-4);
+        ctx.bezierCurveTo(x+40,y+17,x+15,y+1,x+55,y);
+      }
+      ctx.stroke();
+    }
   }
 }
 
-export function drawProCube(ctx, index, yaw, pitch, robot, collision, paintRobot) {
+export function drawProCube(ctx, index, yaw, pitch, robot, collision, paintRobot, burst = 0) {
   const {width:w,height:h} = ctx.canvas;
   const colors=materials[index].colors;
   const project = ([x,y,z]) => {
@@ -83,6 +125,32 @@ export function drawProCube(ctx, index, yaw, pitch, robot, collision, paintRobot
     ctx.globalAlpha=depth>=0 ? .85 : .48;
     ctx.lineWidth=2.8;
     artwork(ctx,index,220,220,colors);
+    ctx.restore();
+    if (burst > 0) {
+      ctx.save();
+      polygon(ctx,screen);
+      ctx.clip();
+      ctx.transform((b[0]-a[0])/220,(b[1]-a[1])/220,(d[0]-a[0])/220,(d[1]-a[1])/220,a[0],a[1]);
+      ctx.globalAlpha = Math.min(.9, burst * 1.8);
+      ctx.lineWidth = 5;
+      const shift = (1-burst)*120;
+      for (let lane=0; lane<7; lane++) {
+        const y=lane*39-30;
+        ctx.strokeStyle=['#f9ff67','#ff53bd','#55fff1','#ad8cff'][ (lane+i)%4 ];
+        ctx.shadowColor=ctx.strokeStyle;
+        ctx.shadowBlur=10;
+        ctx.beginPath();
+        ctx.moveTo(-150,y+shift);
+        ctx.lineTo(28+lane*7,y+shift);
+        ctx.lineTo(28+lane*7,y+shift-26);
+        ctx.lineTo(137+lane*6,y+shift-26);
+        ctx.lineTo(137+lane*6,y+shift+5);
+        ctx.lineTo(370,y+shift+5);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+    ctx.save();
     ctx.restore();
     polygon(ctx,screen);
     ctx.strokeStyle=colors[3];

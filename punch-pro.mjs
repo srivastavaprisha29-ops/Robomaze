@@ -14,6 +14,13 @@ const detect=createFlickDetector({depth:true});
 const position=[0,0,0];
 let velocity=[0,0,0];
 let yaw=.58, pitch=-.4, material=0, collision=null, last, frame, drag=null, live=false;
+const tower=get('strike-tower');
+const marker=get('strike-marker');
+const result=get('strike-result');
+const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)');
+let strike=null;
+let markerLevel=0;
+let burst=0;
 let demo=0;
 const status=message=>{if(get('pro-status').textContent!==message)get('pro-status').textContent=message;};
 
@@ -42,8 +49,12 @@ materials.forEach(({name,design},i)=>{
 function launch({x,y,z,power}) {
   velocity=viewDirection([x,y,z],yaw,pitch).map(component=>component*(3.2+power*8));
   const percent=Math.round(power*100);
-  get('pro-power').value=percent;
   get('pro-value').value=percent+'%';
+  strike={target:Math.min(1.06,power/.86),elapsed:0,power};
+  markerLevel=0;
+  burst=0;
+  tower.dataset.tier='green';
+  result.textContent='Marker climbing…';
 }
 
 function orbit(dx,dy) {
@@ -88,19 +99,34 @@ get('pro-demo').onclick=()=>{
   position.fill(0);
   collision=null;
   const directions=[[1,0,0],[0,-1,0],[0,0,-1],[-1,0,0],[0,1,0],[0,0,1]];
-  const [x,y,z]=directions[demo++%directions.length];
-  launch({x,y,z,power:.68});
+  const [x,y,z]=directions[demo%directions.length];
+  const power=[.28,.62,.89,.99][demo++%4];
+  launch({x,y,z,power});
 };
 
 function animate(now) {
   const dt=Math.min(.033,(now-(last??now))/1000);
   last=now;
+  if(strike){
+    strike.elapsed+=dt;
+    const progress=reduceMotion.matches?1:Math.min(1,strike.elapsed/.62);
+    markerLevel=strike.target*(1-(1-progress)**2);
+    marker.style.bottom=(Math.min(1.06,markerLevel)*100)+'%';
+    tower.dataset.tier=markerLevel>=1?'red':markerLevel>=.45?'yellow':'green';
+    if(progress===1){
+      const overdrive=strike.power>=.95;
+      result.textContent=overdrive?'OVERDRIVE · maze burst!':strike.target>=1?'Bell rung!':strike.target>=.45?'Strong hit':'Light hit';
+      if(overdrive && !reduceMotion.matches)burst=1;
+      strike=null;
+    }
+  }
+  burst=Math.max(0,burst-dt/1.35);
   if(collision)collision.strength-=dt*2;
   collision=advanceBody(position,velocity,dt) ?? (collision?.strength>0?collision:null);
   ctx.clearRect(0,0,canvas.width,canvas.height);
   drawProCube(ctx,material,yaw,pitch,position,collision,(x,y,size)=>{
     drawCast(ctx, selectedRobot(), x-size/2, y-size/2, size);
-  });
+  },burst);
   frame=requestAnimationFrame(animate);
 }
 window.addEventListener('pagehide',()=>{camera.stop();cancelAnimationFrame(frame);});

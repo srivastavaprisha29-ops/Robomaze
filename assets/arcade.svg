@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 300" role="img" aria-label="RoboMaze gesture arcade. A mint pixel robot crosses a neon maze.">
+<defs>
+  <pattern id="dots" width="12" height="12" patternUnits="userSpaceOnUse"><path fill="#36244f" d="M2 2h2v2H2z"/></pattern>
+  <pattern id="bricks" width="30" height="16" patternUnits="userSpaceOnUse"><path fill="#5a409c" d="M0 0h28v14H0z"/><path fill="#9373ed" d="M0 0h28v3H0z"/></pattern>
+</defs>
+<path fill="#120b21" d="M0 0h920v300H0z"/>
+<path fill="url(#dots)" d="M0 0h920v300H0z"/>
+<path fill="none" stroke="#f674ca" stroke-width="2" d="M14 14h892v272H14z"/>
+<path fill="url(#bricks)" d="M30 247h860v22H30zM701 74h189v17H701zM684 91h17v55h-17zM701 130h98v16h-98zM783 146h16v63h-16zM650 206h132v16H650zM858 92h18v117h-18z"/>
+<path fill="#7ef5b3" d="M30 243h860v4H30z"/>
+<path fill="#ffe776" d="M87 56h5v6h6v5h-6v6h-5v-6h-6v-5h6zM491 193h5v6h6v5h-6v6h-5v-6h-6v-5h6zM844 46h5v6h6v5h-6v6h-5v-6h-6v-5h6z"/>
+<text x="68" y="105" fill="#ffe776" font-family="monospace" font-size="17" font-weight="bold" letter-spacing="4">GESTURE ARCADE</text>
+<text x="63" y="177" fill="#7135a4" font-family="monospace" font-size="78" font-weight="bold" letter-spacing="1">ROBOMAZE</text>
+<text x="59" y="171" fill="#f674ca" font-family="monospace" font-size="78" font-weight="bold" letter-spacing="1">ROBO<tspan fill="#7ef5b3">MAZE</tspan></text>
+<text x="68" y="213" fill="#e6d5f4" font-family="monospace" font-size="18">Point. Move. Find the portal.</text>
+<g transform="translate(575 128) scale(4.5)" shape-rendering="crispEdges">
+<path fill="#ffe776" d="M10 1h4v2h-4z"/><path fill="#7ef5b3" d="M11 3h2v3h-2zM5 6h14v9H5zM2 9h2v5H2zM20 9h2v5h-2z"/>
+<path fill="#3da987" d="M5 13h14v2H5zM7 21h4v2H7zM13 21h4v2h-4z"/>
+<path fill="#241743" d="M7 8h10v5H7z"/><path fill="#fff5aa" d="M8 9h2v2H8zM14 9h2v2h-2z"/>
+<path fill="#f674ca" d="M6 16h12v4H6z"/><path fill="#ffe776" d="M11 17h2v2h-2z"/>
+</g>
+<path fill="#f674ca" d="M813 157h31v52h-31z"/><path fill="#7135a4" d="M819 164h19v38h-19z"/><path fill="#ffe776" d="M826 177h5v12h-5z"/>
+</svg>

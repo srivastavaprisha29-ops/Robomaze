@@ -1,12 +1,14 @@
 <p align="center"><img src="assets/arcade.svg" width="920" alt="RoboMaze Gesture Arcade, with a mint pixel robot and a pink portal"></p>
 
 <p align="center">
-  <a href="https://srivastavaprisha29-ops.github.io/Robomaze/"><img alt="Play RoboMaze" src="https://img.shields.io/badge/▶_PLAY-ROBOMAZE-7ef5b3?style=for-the-badge&labelColor=251439"></a>
+  <a href="#run-locally"><img alt="Run RoboMaze locally" src="https://img.shields.io/badge/RUN-LOCALLY-7ef5b3?style=for-the-badge&labelColor=251439"></a>
   <a href="#controls"><img alt="Read the controls" src="https://img.shields.io/badge/CONTROL-GUIDE-f674ca?style=for-the-badge&labelColor=251439"></a>
   <a href="#how-it-works"><img alt="Explore the model" src="https://img.shields.io/badge/COMPUTER-VISION-ffe776?style=for-the-badge&labelColor=251439"></a>
 </p>
 
 ## Play
+
+Start the game using the [local setup](#run-locally).
 
 1. Press **Start Game** to open the control setup.
 2. Press **Enter Maze** and allow webcam access. Choose **Enter with keyboard or touch** for manual play.
@@ -45,8 +47,7 @@ The browser downloads model and runtime files when you enable the camera. Webcam
 
 </details>
 
-<details>
-<summary><strong>✦ Run locally</strong></summary>
+## Run locally
 
 Clone the repository, open its root, and run:
 
@@ -56,4 +57,5 @@ python -m http.server 8000
 
 Open [localhost:8000](http://localhost:8000). Camera permission requires HTTPS or localhost. Gesture mode needs internet access to download MediaPipe and the model.
 
-</details>
+
+For GitHub Pages hosting, set the publishing source to the root of `main` in the repository’s Pages settings.

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Robot Arms — RoboMaze</title>
+<link rel="icon" href="assets/robot.svg">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="arms.mjs"></script>
+</head>
+<body>
+<main>
+  <header class="top"><a href="./"><img src="assets/robot.svg" alt=""> ROBOMAZE</a><a href="./">Back to arcade</a></header>
+  <section class="cabinet">
+    <div class="bar"><span>◆ &nbsp; ROBOT ARMS</span><span>DANCE STAGE</span></div>
+    <div class="dashboard">
+      <div>
+        <h2>Robot dance stage</h2>
+        <div class="dance-stage">
+          <video id="dance-video" playsinline muted hidden aria-hidden="true"></video>
+          <canvas id="dance-canvas" width="800" height="480" role="img" aria-label="A purple robot with moving arms and legs. With tracking enabled, yellow strings link five fingertips to the robot."></canvas>
+        </div>
+      </div>
+      <aside>
+        <h3>Dance controls</h3>
+        <label class="mode-label" for="routine">Routine</label>
+        <select id="routine">
+          <option value="wave">Arm wave</option>
+          <option value="shuffle">Side shuffle</option>
+          <option value="bounce">Power bounce</option>
+        </select>
+        <div class="dance-actions">
+          <button class="primary" id="dance-toggle" type="button">Pause dance</button>
+          <button class="secondary" id="dance-camera" type="button">Enable camera</button>
+        </div>
+        <p class="camera-label" id="dance-status" role="status">Camera off</p>
+        <p class="hint">Show an open hand. Move your hand to sway the robot and curl your fingers to bend its joints.</p>
+      </aside>
+    </div>
+  </section>
+</main>
+</body>
+</html>

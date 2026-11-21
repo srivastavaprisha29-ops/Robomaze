@@ -60,3 +60,7 @@ Open [localhost:8000](http://localhost:8000). Camera permission requires HTTPS o
 
 
 For GitHub Pages hosting, set the publishing source to the root of `main` in the repository’s Pages settings.
+
+## Robot Arms
+
+Open **Robot Arms · Dance Stage** from the arcade title screen. Pick **Arm wave**, **Side shuffle**, or **Power bounce** and start or pause the choreography. Enable the camera to link your five fingertips to the robot with yellow strings. Moving your hand changes the robot’s pose, and curling different fingers bends its arms or legs or shifts its chest light.

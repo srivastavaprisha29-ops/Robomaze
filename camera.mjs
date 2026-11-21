@@ -74,7 +74,8 @@ export function handCamera({ video, status, direction, state, mode, hand }) {
           try { [points] = tracker.detectForVideo(video, performance.now()).landmarks; }
           catch { stop('Hand tracking stopped. Try enabling the camera again.'); return; }
           hand(points ?? null);
-          if (!points) {
+          if (!direction) status(points ? "Hand linked · move your fingers" : "Show one open hand to link the robot");
+          else if (!points) {
             resetGesture();
             status('Show one open hand to set your center');
           } else {

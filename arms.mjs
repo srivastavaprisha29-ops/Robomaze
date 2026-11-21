@@ -56,11 +56,12 @@ function fingerBend(tip) {
 function render() {
   ctx.clearRect(0, 0, width, height);
   if (!video.hidden) box(0, 0, width, height, '#10091e55', 0);
-  const beat = time * 5;
+  const direct = routine.value === 'puppet';
+  const beat = direct ? 0 : time * 5;
   const shuffle = routine.value === 'shuffle';
   const bounce = routine.value === 'bounce';
-  const handX = points ? (0.5 - points[9].x) * 106 : 0;
-  const handY = points ? (points[9].y - .5) * 95 : 0;
+  const handX = points ? (0.5 - points[9].x) * (direct ? 330 : 106) : 0;
+  const handY = points ? (points[9].y - .5) * (direct ? 200 : 95) : 0;
   const x = width / 2 + Math.sin(beat / 2) * (shuffle ? 95 : 24) + handX;
   const y = 231 - Math.abs(Math.sin(beat)) * (bounce ? 53 : 18) + handY;
   const ends = [];
@@ -74,11 +75,11 @@ function render() {
     const shoulder = [x + side * 49, y - 45];
     const hip = [x + side * 23, y + 63];
     const swing = Math.sin(beat + i * Math.PI);
-    const armAngle = side * (1.55 + swing * (shuffle ? .46 : .89) - handY / 70);
+    const armAngle = side * (1.55 + swing * (shuffle ? .46 : .89) - handY / (direct ? 39 : 70));
     const elbow = joint(...shoulder, 48, armAngle);
-    const wrist = joint(...elbow, 42, armAngle + side * (0.55 + 1.3 * fingerBend(i ? 8 : 4)));
+    const wrist = joint(...elbow, 42, armAngle + side * ((direct ? .12 : .55) + (direct ? 3.6 : 1.3) * fingerBend(i ? 8 : 4)));
     const knee = joint(...hip, 43, side * .24 + swing * (shuffle ? .62 : .33));
-    const foot = joint(...knee, 46, -side * .15 - swing * .26 - side * fingerBend(i ? 20 : 16));
+    const foot = joint(...knee, 46, -side * .15 - swing * .26 - side * (direct ? 3 : 1) * fingerBend(i ? 20 : 16));
     ends[i] = wrist;
     ends[3 + i] = foot;
     return { shoulder, elbow, wrist, hip, knee, foot };
@@ -137,7 +138,10 @@ toggle.onclick = () => {
   playing = !playing;
   syncToggle();
 };
-routine.onchange = () => { time = 0; };
+routine.onchange = () => {
+  time = 0;
+  toggle.hidden = routine.value === 'puppet';
+};
 const camera = handCamera({
   video,
   hand: result => { points = result; },

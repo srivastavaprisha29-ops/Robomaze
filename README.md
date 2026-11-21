@@ -42,7 +42,7 @@ The pretrained [MediaPipe Hand Landmarker](https://ai.google.dev/edge/mediapipe/
 | :--- | :--- |
 | Webcam frame → landmarks | MediaPipe’s pretrained model runs in the browser using WebAssembly |
 | Landmarks → direction | Smoothed displacement of the five finger bases from their neutral position |
-| Direction → movement | 140 ms stability threshold, 255 ms movement cooldown, and collision checks. Step mode also requires 140 ms of neutral input before the next shift. |
+| Direction → movement | 48 ms stability threshold, 175 ms repeat interval, and collision checks. Step mode also requires 95 ms of neutral input before the next shift. |
 
 The browser downloads model and runtime files when you enable the camera. Webcam frames are processed locally. The game has no backend or API key.
 
@@ -64,3 +64,5 @@ For GitHub Pages hosting, set the publishing source to the root of `main` in the
 ## Robot Arms
 
 Open **Robot Arms · Dance Stage** from the arcade title screen. Pick **Arm wave**, **Side shuffle**, or **Power bounce** and start or pause the choreography. Enable the camera to link your five fingertips to the robot with yellow strings. Moving your hand changes the robot’s pose, and curling different fingers bends its arms or legs or shifts its chest light.
+
+Choose **Direct hand control** for a pose driven by hand position and finger curl. Both modes use motion-adaptive landmark smoothing to reduce jitter while responding to larger movements quickly.

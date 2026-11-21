@@ -28,14 +28,35 @@ export function makeMaze({ width, height, seed }) {
 export const fingertipIndices = [4, 8, 12, 16, 20];
 const fingerBases = [1, 5, 9, 13, 17];
 
+// Smooth small landmark changes while letting intentional motion catch up quickly.
+export function createLandmarkFilter() {
+  let last = null;
+  let previousTime = 0;
+
+  return (points, now) => {
+    if (!points || !last || now - previousTime > 200) {
+      last = points;
+    } else {
+      const dt = Math.max(1, now - previousTime);
+      last = points.map((point, i) => {
+        const dx = point.x - last[i].x;
+        const dy = point.y - last[i].y;
+        const response = Math.min(1, Math.hypot(dx, dy) / .045);
+        const weight = 1 - Math.exp(-dt / (75 - 63 * response));
+        return { x: last[i].x + dx * weight, y: last[i].y + dy * weight };
+      });
+    }
+    previousTime = now;
+    return last;
+  };
+}
+
 export function createHandSteering() {
   let neutral = null;
-  let filtered = null;
   let previous = null;
 
   function reset() {
     neutral = null;
-    filtered = null;
     previous = null;
   }
 
@@ -50,16 +71,17 @@ export function createHandSteering() {
       center.y += points[index].y / fingerBases.length;
     }
     neutral ??= center;
-    filtered = filtered ? {
-      x: filtered.x + (center.x - filtered.x) * .55,
-      y: filtered.y + (center.y - filtered.y) * .55,
-    } : center;
-    const dx = filtered.x - neutral.x;
-    const dy = filtered.y - neutral.y;
+    const dx = center.x - neutral.x;
+    const dy = center.y - neutral.y;
+    if (previous) {
+      const [sx, sy] = directions[previous];
+      const along = dx * sx + dy * sy;
+      const across = Math.abs(dx * sy - dy * sx);
+      if (along >= .024 && across < along * 1.2) return previous;
+    }
     const horizontal = Math.abs(dx) >= Math.abs(dy);
     const command = horizontal ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down');
-    const threshold = command === previous ? .035 : .065;
-    previous = Math.max(Math.abs(dx), Math.abs(dy)) >= threshold ? command : null;
+    previous = Math.max(Math.abs(dx), Math.abs(dy)) >= .045 ? command : null;
     return previous;
   }
 
@@ -78,12 +100,14 @@ export function createGestureControl() {
   let candidate = null;
   let candidateSince = null;
   let lastMove = -Infinity;
+  let lastCommand = null;
   let needsRelease = false;
 
   function reset() {
     candidate = null;
     candidateSince = null;
     lastMove = -Infinity;
+    lastCommand = null;
     needsRelease = false;
   }
 
@@ -93,13 +117,14 @@ export function createGestureControl() {
       candidateSince = now;
     }
     if (command === null) {
-      if (now - candidateSince >= 140) needsRelease = false;
+      if (now - candidateSince >= 95) needsRelease = false;
       return { phase: needsRelease ? 'release' : 'ready' };
     }
     if (mode === 'step' && needsRelease) return { phase: 'release' };
-    if (now - candidateSince < 140) return { phase: 'aim' };
-    if (now - lastMove < 255) return { phase: 'tracking' };
+    if (now - candidateSince < 48) return { phase: 'aim' };
+    if (command === lastCommand && now - lastMove < 175) return { phase: 'tracking' };
     lastMove = now;
+    lastCommand = command;
     needsRelease = mode === 'step';
     return { phase: needsRelease ? 'release' : 'tracking', move: command };
   }

@@ -1,4 +1,4 @@
-import { createGestureControl, createHandSteering } from './mechanics.mjs';
+import { createGestureControl, createHandSteering, createLandmarkFilter } from './mechanics.mjs';
 
 const version = '0.10.22-rc.20250304';
 const packageUrl = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@' + version;
@@ -6,10 +6,12 @@ const modelUrl = 'https://storage.googleapis.com/mediapipe-models/hand_landmarke
 export function handCamera({ video, status, direction, state, mode, hand }) {
   const gesture = createGestureControl();
   const steering = createHandSteering();
+  const filter = createLandmarkFilter();
 
   function resetGesture() {
     gesture.reset();
     steering.reset();
+    filter(null, 0);
     hand(null);
   }
 
@@ -47,7 +49,7 @@ export function handCamera({ video, status, direction, state, mode, hand }) {
     state('loading');
     status('Allow camera access to continue.');
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 } }, audio: false });
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 }, frameRate: { ideal: 60 } }, audio: false });
       if (session !== run) {
         stream.getTracks().forEach(track => track.stop());
         return;
@@ -66,14 +68,15 @@ export function handCamera({ video, status, direction, state, mode, hand }) {
       let lastFrame = -1;
       let lastSample = -Infinity;
       function tick(now) {
-        if (video.readyState >= 2 && video.currentTime !== lastFrame && now - lastSample >= 40) {
+        if (video.readyState >= 2 && video.currentTime !== lastFrame && now - lastSample >= 15) {
           if (now - lastSample > 350) resetGesture();
           lastFrame = video.currentTime;
           lastSample = now;
           let points;
           try { [points] = tracker.detectForVideo(video, performance.now()).landmarks; }
           catch { stop('Hand tracking stopped. Try enabling the camera again.'); return; }
-          hand(points ?? null);
+          points = filter(points ?? null, now);
+          hand(points);
           if (!direction) status(points ? "Hand linked · move your fingers" : "Show one open hand to link the robot");
           else if (!points) {
             resetGesture();

@@ -1,3 +1,4 @@
+import { drawCast, mountCastPicker } from './punch-cast.mjs';
 import { handCamera } from './camera.mjs';
 import { cubes, drawCube, drawCubeImpact } from './cubes.mjs';
 import { createFlickDetector } from './flick.mjs';
@@ -10,8 +11,7 @@ const button = byId('punch-camera');
 const { width, height } = canvas;
 const room = { left: 112, right: 568, top: 86, bottom: 354 };
 const radius = 25;
-const sprite = new Image();
-sprite.src = 'assets/robot.svg';
+const selectedRobot = mountCastPicker(byId('robot-cast'));
 const detect = createFlickDetector();
 let ready = false;
 let frame;
@@ -98,12 +98,7 @@ function render() {
   ctx.save();
   ctx.translate(x, y);
   ctx.rotate(angle);
-  ctx.imageSmoothingEnabled = false;
-  if (sprite.complete && sprite.naturalWidth) ctx.drawImage(sprite, -radius, -radius, radius * 2, radius * 2);
-  else {
-    ctx.fillStyle = '#7ef5b3';
-    ctx.fillRect(-20, -20, 40, 40);
-  }
+  drawCast(ctx, selectedRobot(), -radius, -radius, radius * 2);
   ctx.restore();
 }
 

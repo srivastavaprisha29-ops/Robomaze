@@ -1,3 +1,4 @@
+import { drawCast, mountCastPicker } from './punch-cast.mjs';
 import { handCamera } from './camera.mjs';
 import { createFlickDetector } from './flick.mjs';
 import { advanceBody, drawProCube, materials, viewDirection } from './pro-cube.mjs';
@@ -8,8 +9,7 @@ const ctx=canvas.getContext('2d');
 const video=get('pro-video');
 const picker=get('pro-materials');
 const button=get('pro-camera');
-const robot=new Image();
-robot.src='assets/robot.svg';
+const selectedRobot = mountCastPicker(get('robot-cast'));
 const detect=createFlickDetector({depth:true});
 const position=[0,0,0];
 let velocity=[0,0,0];
@@ -99,8 +99,7 @@ function animate(now) {
   collision=advanceBody(position,velocity,dt) ?? (collision?.strength>0?collision:null);
   ctx.clearRect(0,0,canvas.width,canvas.height);
   drawProCube(ctx,material,yaw,pitch,position,collision,(x,y,size)=>{
-    if(robot.complete && robot.naturalWidth)ctx.drawImage(robot,x-size/2,y-size/2,size,size);
-    else {ctx.fillStyle='#7ef5b3';ctx.fillRect(x-size/2,y-size/2,size,size);}
+    drawCast(ctx, selectedRobot(), x-size/2, y-size/2, size);
   });
   frame=requestAnimationFrame(animate);
 }

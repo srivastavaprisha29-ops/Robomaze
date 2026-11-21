@@ -82,3 +82,8 @@ footer{color:var(--muted);margin-top:12px;font-size:8px}footer a{color:var(--min
 .pro-stage canvas{touch-action:none;cursor:grab}
 .pro-stage canvas:active{cursor:grabbing}
 .pro-display .cube-option canvas{background:radial-gradient(ellipse,#302248,#0b0816 74%)}
+
+.cast-picker{margin-top:20px;border:1px solid #624582;background:#191127}
+.cast-picker summary{padding:12px;cursor:pointer;color:var(--yellow);font-weight:700}
+.cast-picker .cube-picker{padding:0 10px 10px}
+.cast-option canvas{max-width:96px;margin:0 auto}

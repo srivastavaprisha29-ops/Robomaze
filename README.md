@@ -12,7 +12,7 @@ Start the game using the [local setup](#run-locally).
 
 1. Press **Start Game** to open the control setup.
 2. Press **Enter Maze** and allow webcam access. Choose **Enter with keyboard or touch** for manual play.
-3. Guide the robot to the pink portal in **Neon Depot**, **Circuit Garden**, and **Midnight Relay**.
+3. Follow the dotted yellow maze drawn over your mirrored camera feed. Guide the robot to the pink portal in **Neon Depot**, **Circuit Garden**, and **Midnight Relay**.
 
 ## Controls
 

@@ -46,7 +46,9 @@
       <div>
         <h2 id="level-name" tabindex="-1"></h2>
         <div class="hud"><span>STEPS <b id="steps">00</b></span><span>TIME <b id="time">00:00</b></span></div>
-        <div class="board">
+        <div class="board" id="board">
+          <video id="video" playsinline muted hidden aria-hidden="true"></video>
+          <canvas id="landmarks" aria-hidden="true"></canvas>
           <canvas id="maze" role="img" aria-label="Maze board"></canvas>
           <div class="overlay" id="clear" hidden>
             <div><h2 id="result"></h2><p id="summary"></p><button class="primary" id="next"></button></div>
@@ -56,15 +58,10 @@
       </div>
       <aside>
         <h3>Hand tracker</h3>
-        <div class="monitor">
-          <video id="video" playsinline muted hidden></video>
-          <canvas id="landmarks" aria-hidden="true"></canvas>
-          <img id="standby" src="assets/robot.svg" alt="">
-        </div>
         <p class="camera-label" id="camera-status" role="status">Camera off</p>
         <button class="secondary" id="camera">Enable camera</button>
         <p id="signal" class="signal">—</p>
-        <p class="hint">Show one hand. Point with your index finger. Curl the other fingers.</p>
+        <p class="hint">Point with your index finger and curl the other fingers. Steer the robot on the camera view.</p>
         <h3>Manual controls</h3>
         <div class="dpad">
           <button data-dir="up" aria-label="Up">↑</button><button data-dir="left" aria-label="Left">←</button>

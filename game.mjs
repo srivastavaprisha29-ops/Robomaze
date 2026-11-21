@@ -11,6 +11,7 @@ const cell = 28;
 let screen = 'title';
 let index, tiles, x, y, steps, started, won;
 let sound = false;
+let cameraLive = false;
 let audio;
 let manualAt = -Infinity;
 
@@ -66,9 +67,28 @@ function reset(levelIndex) {
 }
 
 function render() {
+  ctx.clearRect(0, 0, board.width, board.height);
+  if (cameraLive) {
+    // Darken the feed just enough to keep the maze readable over bright backgrounds.
+    ctx.fillStyle = 'rgba(16, 9, 30, .44)';
+    ctx.fillRect(0, 0, board.width, board.height);
+    ctx.fillStyle = '#ffe776';
+  }
   tiles.forEach((row, ty) => row.forEach((wall, tx) => {
     const left = tx * cell;
     const top = ty * cell;
+    if (cameraLive) {
+      if (wall) return;
+      for (const [dx, dy] of Object.values(directions)) {
+        if (tiles[ty + dy]?.[tx + dx] === 0) continue;
+        for (let offset = 3; offset < cell; offset += 7) {
+          const dotX = dx === 0 ? left + offset : left + (dx > 0 ? cell - 3 : 0);
+          const dotY = dy === 0 ? top + offset : top + (dy > 0 ? cell - 3 : 0);
+          ctx.fillRect(dotX, dotY, 3, 3);
+        }
+      }
+      return;
+    }
     ctx.fillStyle = wall ? '#38235e' : '#140e25';
     ctx.fillRect(left, top, cell, cell);
     if (wall) {
@@ -148,8 +168,10 @@ const camera = handCamera({
   direction: command => move(command, 'gesture'),
   state: (state) => {
     byId('camera').textContent = state === 'off' ? 'Enable camera' : state === 'loading' ? 'Cancel camera' : 'Disable camera';
-    byId('video').hidden = state !== 'live';
-    byId('standby').hidden = state === 'live';
+    cameraLive = state === 'live';
+    byId('video').hidden = !cameraLive;
+    byId('board').classList.toggle('camera-live', cameraLive);
+    if (tiles) render();
   },
 });
 

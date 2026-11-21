@@ -1,8 +1,8 @@
 export const directions = { up: [0, -1], left: [-1, 0], down: [0, 1], right: [1, 0] };
 export const levels = [
-  { name: 'Neon Depot', width: 11, height: 9, seed: 27 },
-  { name: 'Circuit Garden', width: 15, height: 11, seed: 92 },
-  { name: 'Midnight Relay', width: 19, height: 13, seed: 147 },
+  { name: 'Neon Depot', width: 15, height: 11, seed: 27 },
+  { name: 'Circuit Garden', width: 19, height: 13, seed: 92 },
+  { name: 'Midnight Relay', width: 23, height: 17, seed: 147 },
 ];
 
 export function makeMaze({ width, height, seed }) {

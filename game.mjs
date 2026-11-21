@@ -46,6 +46,7 @@ function show(name, focus) {
 }
 
 function reset(levelIndex) {
+  camera.resetGesture();
   index = levelIndex;
   const level = levels[index];
   tiles = makeMaze(level);
@@ -166,6 +167,7 @@ const camera = handCamera({
     if (byId('camera-status').textContent !== message) byId('camera-status').textContent = message;
   },
   direction: command => move(command, 'gesture'),
+  mode: () => byId('gesture-mode').value,
   state: (state) => {
     byId('camera').textContent = state === 'off' ? 'Enable camera' : state === 'loading' ? 'Cancel camera' : 'Disable camera';
     cameraLive = state === 'live';
@@ -188,6 +190,12 @@ byId('next').onclick = () => {
   byId('level-name').focus();
 };
 byId('reset').onclick = () => reset(index);
+byId('gesture-mode').onchange = event => {
+  camera.resetGesture();
+  byId('mode-help').textContent = event.target.value === 'step'
+    ? 'Point for one tile, then relax your hand before pointing again.'
+    : 'Keep pointing to move along a corridor.';
+};
 byId('camera').onclick = () => camera.active ? camera.stop() : camera.start();
 document.querySelectorAll('[data-home]').forEach(button => button.onclick = () => {
   camera.stop();

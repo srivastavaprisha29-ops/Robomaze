@@ -49,3 +49,7 @@ aside{border:1px solid #60427c;padding:13px;background:#1e112c;align-self:start}
 footer{color:var(--muted);margin-top:12px;font-size:8px}footer a{color:var(--mint)}
 @media(max-width:680px){.dashboard{grid-template-columns:1fr}.scene{height:161px}.scene img{width:78px}.portal{height:69px;width:55px}.stars{inset:70px 5% auto;font-size:15px}}
 @media(prefers-reduced-motion:reduce){.scene img{animation:none}}
+
+.mode-label{display:block;margin:14px 0 5px;color:var(--mint);font-size:13px}
+#gesture-mode{width:100%;padding:8px;background:#251439;border:1px solid #8b62ac;color:var(--ink);font:inherit;font-size:13px}
+#mode-help{margin:6px 0 12px}

@@ -19,6 +19,7 @@ Start the game using the [local setup](#run-locally).
 | Input | Action |
 | :--- | :--- |
 | Index finger points ↑ ↓ ← → | Move in that direction on the mirrored preview |
+| **Gesture movement** menu | Hold to repeat in corridors, or choose one step per point for tight turns |
 | Relax your hand or point diagonally | Stop gesture movement |
 | Arrow keys, WASD, or on-screen arrows | Move one tile per input |
 | Restart level | Return to the starting tile and reset the counters |
@@ -41,7 +42,7 @@ The pretrained [MediaPipe Hand Landmarker](https://ai.google.dev/edge/mediapipe/
 | :--- | :--- |
 | Webcam frame → landmarks | MediaPipe’s pretrained model runs in the browser using WebAssembly |
 | Landmarks → direction | Finger geometry and the index finger’s dominant axis |
-| Direction → movement | 140 ms stability threshold, 255 ms repeat interval, and collision checks |
+| Direction → movement | 140 ms stability threshold, 255 ms movement cooldown, and collision checks. Step mode also requires 140 ms of neutral input before the next point. |
 
 The browser downloads model and runtime files when you enable the camera. Webcam frames are processed locally. The game has no backend or API key.
 

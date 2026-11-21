@@ -60,6 +60,12 @@
         <h3>Hand tracker</h3>
         <p class="camera-label" id="camera-status" role="status">Camera off</p>
         <button class="secondary" id="camera">Enable camera</button>
+        <label class="mode-label" for="gesture-mode">Gesture movement</label>
+        <select id="gesture-mode" aria-describedby="mode-help">
+          <option value="repeat">Hold to repeat</option>
+          <option value="step">One step per point</option>
+        </select>
+        <p class="hint" id="mode-help">Keep pointing to move along a corridor.</p>
         <p id="signal" class="signal">—</p>
         <p class="hint">Point with your index finger and curl the other fingers. Steer the robot on the camera view.</p>
         <h3>Manual controls</h3>

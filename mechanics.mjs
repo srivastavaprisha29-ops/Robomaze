@@ -41,3 +41,36 @@ export function pointDirection(landmarks, aspect = 1) {
   if (Math.abs(y) > Math.abs(x) * 1.24) return y > 0 ? 'down' : 'up';
   return null;
 }
+
+export function createGestureControl() {
+  let candidate = null;
+  let candidateSince = null;
+  let lastMove = -Infinity;
+  let needsRelease = false;
+
+  function reset() {
+    candidate = null;
+    candidateSince = null;
+    lastMove = -Infinity;
+    needsRelease = false;
+  }
+
+  function update(command, now, mode) {
+    if (candidateSince === null || command !== candidate) {
+      candidate = command;
+      candidateSince = now;
+    }
+    if (command === null) {
+      if (now - candidateSince >= 140) needsRelease = false;
+      return { phase: needsRelease ? 'release' : 'ready' };
+    }
+    if (mode === 'step' && needsRelease) return { phase: 'release' };
+    if (now - candidateSince < 140) return { phase: 'aim' };
+    if (now - lastMove < 255) return { phase: 'tracking' };
+    lastMove = now;
+    needsRelease = mode === 'step';
+    return { phase: needsRelease ? 'release' : 'tracking', move: command };
+  }
+
+  return { update, reset };
+}

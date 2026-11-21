@@ -1,9 +1,32 @@
-import { directions, levels, makeMaze } from './mechanics.mjs';
+import { cameraPoint, directions, fingertipIndices, levels, makeMaze } from './mechanics.mjs';
 import { handCamera } from './camera.mjs';
 
 const byId = id => document.getElementById(id);
 const board = byId('maze');
 const ctx = board.getContext('2d');
+const strings = byId('strings');
+const stringContext = strings.getContext('2d');
+const video = byId('video');
+let trackedHand = null;
+
+function drawStrings() {
+  stringContext.clearRect(0, 0, strings.width, strings.height);
+  if (!trackedHand || !video.videoWidth || !video.videoHeight) return;
+  stringContext.strokeStyle = '#ffe776';
+  stringContext.fillStyle = '#ffe776';
+  stringContext.lineWidth = 1.6;
+  for (const [finger, index] of fingertipIndices.entries()) {
+    const tip = cameraPoint(trackedHand[index], video.videoWidth, video.videoHeight, strings.width, strings.height);
+    stringContext.beginPath();
+    stringContext.moveTo(tip.x, tip.y);
+    stringContext.lineTo(x * cell + 6 + finger * 4, y * cell + 9);
+    stringContext.stroke();
+    stringContext.beginPath();
+    stringContext.arc(tip.x, tip.y, 2.8, 0, Math.PI * 2);
+    stringContext.fill();
+  }
+}
+
 const robot = new Image();
 robot.src = 'assets/robot.svg';
 robot.onload = () => { if (tiles) render(); };
@@ -60,6 +83,8 @@ function reset(levelIndex) {
   byId('level-name').textContent = level.name;
   board.width = level.width * cell;
   board.height = level.height * cell;
+  strings.width = board.width;
+  strings.height = board.height;
   ctx.imageSmoothingEnabled = false;
   byId('steps').textContent = '00';
   byId('time').textContent = '00:00';
@@ -118,6 +143,7 @@ function render() {
     ctx.fillStyle = '#7ef5b3';
     ctx.fillRect(x * cell + 5, y * cell + 5, 18, 18);
   }
+  drawStrings();
   board.setAttribute('aria-label', 'Maze board. Robot at column ' + (x + 1) + ', row ' + (y + 1) + '. Portal at column ' + (levels[index].width - 1) + ', row ' + (levels[index].height - 1) + '.');
 }
 
@@ -162,7 +188,8 @@ function move(command, source) {
 }
 
 const camera = handCamera({
-  video: byId('video'), overlay: byId('landmarks'),
+  video,
+  hand: points => { trackedHand = points; drawStrings(); },
   status: (message) => {
     if (byId('camera-status').textContent !== message) byId('camera-status').textContent = message;
   },
@@ -171,7 +198,8 @@ const camera = handCamera({
   state: (state) => {
     byId('camera').textContent = state === 'off' ? 'Enable camera' : state === 'loading' ? 'Cancel camera' : 'Disable camera';
     cameraLive = state === 'live';
-    byId('video').hidden = !cameraLive;
+    video.hidden = !cameraLive;
+    byId('recenter').hidden = !cameraLive;
     byId('board').classList.toggle('camera-live', cameraLive);
     if (tiles) render();
   },
@@ -193,9 +221,10 @@ byId('reset').onclick = () => reset(index);
 byId('gesture-mode').onchange = event => {
   camera.resetGesture();
   byId('mode-help').textContent = event.target.value === 'step'
-    ? 'Point for one tile, then relax your hand before pointing again.'
-    : 'Keep pointing to move along a corridor.';
+    ? 'Shift for one tile, then return to center before the next move.'
+    : 'Hold your hand off-center to keep moving.';
 };
+byId('recenter').onclick = () => camera.resetGesture();
 byId('camera').onclick = () => camera.active ? camera.stop() : camera.start();
 document.querySelectorAll('[data-home]').forEach(button => button.onclick = () => {
   camera.stop();

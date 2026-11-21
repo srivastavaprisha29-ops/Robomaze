@@ -25,21 +25,53 @@ export function makeMaze({ width, height, seed }) {
   return tiles;
 }
 
-export function pointDirection(landmarks, aspect = 1) {
-  if (landmarks?.length !== 21) return null;
-  const distance = (a, b) => Math.hypot((landmarks[a].x - landmarks[b].x) * aspect, landmarks[a].y - landmarks[b].y);
-  const extension = (base) => {
-    const length = distance(base, base + 1) + distance(base + 1, base + 2) + distance(base + 2, base + 3);
-    return length ? distance(base, base + 3) / length : 0;
+export const fingertipIndices = [4, 8, 12, 16, 20];
+const fingerBases = [1, 5, 9, 13, 17];
+
+export function createHandSteering() {
+  let neutral = null;
+  let filtered = null;
+  let previous = null;
+
+  function reset() {
+    neutral = null;
+    filtered = null;
+    previous = null;
+  }
+
+  function update(points, aspect) {
+    if (!points) {
+      reset();
+      return null;
+    }
+    const center = { x: 0, y: 0 };
+    for (const index of fingerBases) {
+      center.x += (1 - points[index].x) * aspect / fingerBases.length;
+      center.y += points[index].y / fingerBases.length;
+    }
+    neutral ??= center;
+    filtered = filtered ? {
+      x: filtered.x + (center.x - filtered.x) * .55,
+      y: filtered.y + (center.y - filtered.y) * .55,
+    } : center;
+    const dx = filtered.x - neutral.x;
+    const dy = filtered.y - neutral.y;
+    const horizontal = Math.abs(dx) >= Math.abs(dy);
+    const command = horizontal ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down');
+    const threshold = command === previous ? .035 : .065;
+    previous = Math.max(Math.abs(dx), Math.abs(dy)) >= threshold ? command : null;
+    return previous;
+  }
+
+  return { update, reset };
+}
+
+export function cameraPoint(point, videoWidth, videoHeight, boardWidth, boardHeight) {
+  const scale = Math.max(boardWidth / videoWidth, boardHeight / videoHeight);
+  return {
+    x: (1 - point.x - .5) * videoWidth * scale + boardWidth / 2,
+    y: (point.y - .5) * videoHeight * scale + boardHeight / 2,
   };
-  const palm = distance(0, 9);
-  if (!palm || extension(5) < .86 || distance(5, 8) < palm * .4) return null;
-  if ([9, 13, 17].some(base => extension(base) > .82 && distance(base, base + 3) > palm * .4)) return null;
-  const x = (landmarks[5].x - landmarks[8].x) * aspect; // The preview is mirrored.
-  const y = landmarks[8].y - landmarks[5].y;
-  if (Math.abs(x) > Math.abs(y) * 1.24) return x > 0 ? 'right' : 'left';
-  if (Math.abs(y) > Math.abs(x) * 1.24) return y > 0 ? 'down' : 'up';
-  return null;
 }
 
 export function createGestureControl() {

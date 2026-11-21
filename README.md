@@ -18,22 +18,22 @@ Start the game using the [local setup](#run-locally).
 
 | Input | Action |
 | :--- | :--- |
-| Index finger points ↑ ↓ ← → | Move in that direction on the mirrored preview |
-| **Gesture movement** menu | Hold to repeat in corridors, or choose one step per point for tight turns |
-| Relax your hand or point diagonally | Stop gesture movement |
+| Slide your open hand ↑ ↓ ← → | Move in that direction on the mirrored preview |
+| **Gesture movement** menu | Hold to repeat in corridors, or choose one step per shift for tight turns |
+| Return your hand to center | Stop gesture movement |
 | Arrow keys, WASD, or on-screen arrows | Move one tile per input |
 | Restart level | Return to the starting tile and reset the counters |
 
 <details>
 <summary><strong>✦ Webcam tips</strong></summary>
 
-Show one hand in good light with the full palm visible. Extend your index finger and curl your middle, ring, and little fingers. Hold the gesture briefly to start moving. Use **Disable camera** to stop the feed. If permission is blocked, you can still play and retry from the hand tracker panel.
+Show one hand in good light with the full palm visible. Start with your open hand near the middle of the feed. Five yellow strings connect your fingertips to the robot. Slide your whole hand to steer. Use Recenter hand to set a new resting position. Use **Disable camera** to stop the feed. If permission is blocked, you can still play and retry from the hand tracker panel.
 
 </details>
 
 ## How it works
 
-The pretrained [MediaPipe Hand Landmarker](https://ai.google.dev/edge/mediapipe/solutions/vision/hand_landmarker/web_js) estimates 21 landmarks per hand. RoboMaze checks finger extension from those landmarks, mirrors the horizontal direction to match the preview, and maps a stable point to a grid move. The maze engine checks each move for wall collisions and generates three reproducible layouts using seeded depth-first search.
+The pretrained [MediaPipe Hand Landmarker](https://ai.google.dev/edge/mediapipe/solutions/vision/hand_landmarker/web_js) estimates 21 landmarks per hand. RoboMaze tracks the center of the five finger bases relative to a neutral position, mirrors horizontal movement, and maps a stable displacement to a grid move. The maze engine checks each move for wall collisions and generates three reproducible layouts using seeded depth-first search.
 
 <details>
 <summary><strong>✦ Trace a gesture from camera to maze</strong></summary>
@@ -41,8 +41,8 @@ The pretrained [MediaPipe Hand Landmarker](https://ai.google.dev/edge/mediapipe/
 | Stage | Implementation |
 | :--- | :--- |
 | Webcam frame → landmarks | MediaPipe’s pretrained model runs in the browser using WebAssembly |
-| Landmarks → direction | Finger geometry and the index finger’s dominant axis |
-| Direction → movement | 140 ms stability threshold, 255 ms movement cooldown, and collision checks. Step mode also requires 140 ms of neutral input before the next point. |
+| Landmarks → direction | Smoothed displacement of the five finger bases from their neutral position |
+| Direction → movement | 140 ms stability threshold, 255 ms movement cooldown, and collision checks. Step mode also requires 140 ms of neutral input before the next shift. |
 
 The browser downloads model and runtime files when you enable the camera. Webcam frames are processed locally. The game has no backend or API key.
 

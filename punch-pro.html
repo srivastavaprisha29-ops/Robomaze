@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Robo Punch Pro</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="assets/robot.svg">
+<script type="module" src="punch-pro.mjs"></script>
+</head>
+<body>
+<main>
+  <header class="top"><a href="./"><img src="assets/robot.svg" alt=""> ROBOMAZE</a><a href="punch.html">Classic Punch</a></header>
+  <section class="cabinet pro-cabinet">
+    <div class="bar"><span>◆ &nbsp; ROBO PUNCH PRO</span></div>
+    <div class="dashboard">
+      <div class="pro-display">
+        <div class="punch-arena pro-stage">
+          <video id="pro-video" playsinline muted hidden aria-hidden="true"></video>
+          <canvas id="pro-canvas" width="760" height="560" tabindex="0" role="img" aria-label="Rotatable 3D cube with a robot inside. Drag anywhere on the view to rotate."></canvas>
+        </div>
+        <p class="hint">Drag the view to orbit the cube. On a keyboard, focus the cube and use the arrow keys.</p>
+        <h3 id="pro-material-label">Cube design</h3>
+        <div id="pro-materials" class="cube-picker" role="group" aria-labelledby="pro-material-label"></div>
+      </div>
+      <aside>
+        <h3>Flick controls</h3>
+        <p>Touch your thumb to your index or middle fingertip, then snap the finger outward. Flick sideways, vertically, or toward the camera.</p>
+        <div class="dance-actions">
+          <button class="primary" id="pro-camera">Enable camera</button>
+          <button class="secondary" id="pro-demo">Demo 3D flick</button>
+        </div>
+        <p class="camera-label" id="pro-status" role="status">Camera off</p>
+        <label for="pro-power">Last hit power <output id="pro-value">0%</output></label>
+        <progress class="punch-meter" id="pro-power" max="100" value="0"></progress>
+      </aside>
+    </div>
+  </section>
+</main>
+</body>
+</html>

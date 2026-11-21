@@ -79,4 +79,4 @@ Open **Robo Punch Pro** for a perspective-projected cube with six collision face
 
 Both Punch modes share a **Choose your robot** picker with twelve illustrated characters. The selected outfit carries between the two modes in the same browser.
 
-The Pro power tower climbs through green and yellow toward the red bell. Hits at 86% ring the bell, and hits of at least 95% trigger an animated neon maze across the cube. The demo cycles through four strengths, including an overdrive hit. Four additional designs include Gilded Deco, Jade Lotus, Ultraviolet Pixel, and Porcelain Storm.
+The Pro power tower climbs through green and yellow toward the red bell. Hits at 94% ring the bell, and hits of at least 99% trigger an animated neon maze across the cube. The demo cycles through four strengths, including an overdrive hit. Four additional designs include Gilded Deco, Jade Lotus, Ultraviolet Pixel, and Porcelain Storm.

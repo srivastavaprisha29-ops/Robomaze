@@ -90,11 +90,11 @@ footer{color:var(--muted);margin-top:12px;font-size:8px}footer a{color:var(--min
 
 .strike-score{padding:12px;border:1px solid #805ca6;background:#180f29}
 .strike-label{display:flex;justify-content:space-between;gap:8px;color:var(--yellow);font-weight:700;font-size:12px}
-.strike-tower{--strike-color:#7ef5b3;position:relative;height:170px;margin:10px 0 0;border:1px solid #674681;background:repeating-linear-gradient(0deg,#211333 0 15px,#3b2450 15px 16px)}
+.strike-tower{--strike-color:#7ef5b3;position:relative;height:clamp(260px,36vh,340px);margin:10px 0 0;border:1px solid #674681;background:repeating-linear-gradient(0deg,#211333 0 15px,#3b2450 15px 16px)}
 .strike-tower[data-tier=yellow]{--strike-color:#ffe776}
 .strike-tower[data-tier=red]{--strike-color:#ff637e}
-.strike-track{position:absolute;left:24px;top:36px;bottom:14px;width:15px;border:2px solid #e9caff;border-radius:9px;background:linear-gradient(to top,#44c790 0 40%,#dfbb41 61% 83%,#e14e63 92%);box-shadow:0 0 12px #c8a5ff55}
-#strike-marker{position:absolute;bottom:0;left:50%;width:29px;height:10px;transform:translate(-50%,50%);border-radius:3px;background:var(--strike-color);border:2px solid #fff;box-shadow:0 0 12px var(--strike-color)}
+.strike-track{position:absolute;left:26px;top:32px;bottom:18px;width:20px;border:2px solid #e9caff;border-radius:9px;background:linear-gradient(to top,#44c790 0 40%,#dfbb41 61% 83%,#e14e63 92%);box-shadow:0 0 12px #c8a5ff55}
+#strike-marker{position:absolute;bottom:0;left:50%;width:36px;height:13px;transform:translate(-50%,50%);border-radius:3px;background:var(--strike-color);border:2px solid #fff;box-shadow:0 0 12px var(--strike-color)}
 .strike-bell{position:absolute;left:8px;top:4px;font-size:11px;color:#271532;background:var(--strike-color);padding:2px 8px;border-radius:8px 8px 2px 2px;font-weight:700}
-.strike-tier{position:absolute;left:55px;font-size:10px;letter-spacing:.08em;font-weight:700}
-.strike-red{top:33px;color:#ff91a4}.strike-yellow{top:78px;color:#ffe776}.strike-green{bottom:10px;color:#7ef5b3}
+.strike-tier{position:absolute;left:62px;font-size:10px;letter-spacing:.08em;font-weight:700}
+.strike-red{top:27px;color:#ff91a4}.strike-yellow{top:51%;color:#ffe776}.strike-green{bottom:14px;color:#7ef5b3}

@@ -18,6 +18,8 @@ const tower=get('strike-tower');
 const marker=get('strike-marker');
 const result=get('strike-result');
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)');
+const bellPower=.94;
+const overdrivePower=.99;
 let strike=null;
 let markerLevel=0;
 let burst=0;
@@ -50,8 +52,9 @@ function launch({x,y,z,power}) {
   velocity=viewDirection([x,y,z],yaw,pitch).map(component=>component*(3.2+power*8));
   const percent=Math.round(power*100);
   get('pro-value').value=percent+'%';
-  strike={target:Math.min(1.06,power/.86),elapsed:0,power};
+  strike={target:Math.min(1.06,power/bellPower),elapsed:0,power};
   markerLevel=0;
+  marker.style.bottom='0%';
   burst=0;
   tower.dataset.tier='green';
   result.textContent='Marker climbing…';
@@ -100,7 +103,7 @@ get('pro-demo').onclick=()=>{
   collision=null;
   const directions=[[1,0,0],[0,-1,0],[0,0,-1],[-1,0,0],[0,1,0],[0,0,1]];
   const [x,y,z]=directions[demo%directions.length];
-  const power=[.28,.62,.89,.99][demo++%4];
+  const power=[.28,.62,.96,1][demo++%4];
   launch({x,y,z,power});
 };
 
@@ -109,12 +112,12 @@ function animate(now) {
   last=now;
   if(strike){
     strike.elapsed+=dt;
-    const progress=reduceMotion.matches?1:Math.min(1,strike.elapsed/.62);
+    const progress=reduceMotion.matches?1:Math.min(1,strike.elapsed/.86);
     markerLevel=strike.target*(1-(1-progress)**2);
     marker.style.bottom=(Math.min(1.06,markerLevel)*100)+'%';
     tower.dataset.tier=markerLevel>=1?'red':markerLevel>=.45?'yellow':'green';
     if(progress===1){
-      const overdrive=strike.power>=.95;
+      const overdrive=strike.power>=overdrivePower;
       result.textContent=overdrive?'OVERDRIVE · maze burst!':strike.target>=1?'Bell rung!':strike.target>=.45?'Strong hit':'Light hit';
       if(overdrive && !reduceMotion.matches)burst=1;
       strike=null;

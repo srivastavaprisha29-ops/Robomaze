@@ -70,3 +70,5 @@ Choose **Direct hand control** for a pose driven by hand position and finger cur
 ## Robo Punch
 
 Open **Robo Punch** and enable the camera. Touch your thumb to your index or middle fingertip, then snap that finger outward. The robot launches in the mirrored flick direction and rebounds off the fixed arena walls. Faster flicks impart more speed. **Demo flick** works without a camera.
+
+Choose Rose Prism, Obsidian, Crimson Reactor, or Tidal Glass to change the arena artwork and impact patterns. Cube artwork stays visible over the mirrored feed in camera mode.

@@ -1,4 +1,5 @@
 import { handCamera } from './camera.mjs';
+import { cubes, drawCube, drawCubeImpact } from './cubes.mjs';
 import { createFlickDetector } from './flick.mjs';
 
 const byId = id => document.getElementById(id);
@@ -17,6 +18,32 @@ let frame;
 let previous;
 let x, y, vx, vy, angle, spin, impact, wall;
 let demoDirection = 1;
+let selectedCube = cubes[0];
+let impactX, impactY;
+const picker = byId('cube-picker');
+for (const cube of cubes) {
+  const option = document.createElement('button');
+  option.type = 'button';
+  option.className = 'cube-option';
+  option.setAttribute('aria-pressed', String(cube === selectedCube));
+  const preview = document.createElement('canvas');
+  preview.width = 144;
+  preview.height = 88;
+  preview.setAttribute('aria-hidden', 'true');
+  const previewContext = preview.getContext('2d');
+  previewContext.scale(144 / width, 88 / height);
+  drawCube(previewContext, cube, room);
+  const name = document.createElement('strong');
+  name.textContent = cube.name;
+  const note = document.createElement('span');
+  note.textContent = cube.note;
+  option.append(preview, name, note);
+  option.onclick = () => {
+    selectedCube = cube;
+    for (const button of picker.children) button.setAttribute('aria-pressed', String(button === option));
+  };
+  picker.append(option);
+}
 
 function reset() {
   x = width / 2;
@@ -48,6 +75,8 @@ function advance(dt) {
     if (position >= min && position <= max) return [position, velocity];
     wall = position < min ? near : far;
     impact = Math.min(1, Math.abs(velocity) / 780);
+    impactX = wall === 'left' ? room.left : wall === 'right' ? room.right : Math.max(room.left, Math.min(room.right, x));
+    impactY = wall === 'top' ? room.top : wall === 'bottom' ? room.bottom : Math.max(room.top, Math.min(room.bottom, y));
     spin *= -.52;
     return [Math.max(min, Math.min(max, position)), velocity * -.45];
   };
@@ -60,48 +89,12 @@ function advance(dt) {
   impact = Math.max(0, impact - dt * 2);
 }
 
-function rectangle(left, top, right, bottom) {
-  ctx.strokeRect(left, top, right - left, bottom - top);
-}
-
 function render() {
   ctx.clearRect(0, 0, width, height);
   ctx.fillStyle = video.hidden ? '#17112c55' : '#10091e65';
   ctx.fillRect(0, 0, width, height);
-  ctx.save();
-  ctx.strokeStyle = '#8c6ae7';
-  ctx.lineWidth = 2;
-  rectangle(54, 39, 626, 393);
-  for (const [ax, ay, bx, by] of [
-    [54, 39, room.left, room.top], [626, 39, room.right, room.top],
-    [54, 393, room.left, room.bottom], [626, 393, room.right, room.bottom],
-  ]) {
-    ctx.beginPath();
-    ctx.moveTo(ax, ay);
-    ctx.lineTo(bx, by);
-    ctx.stroke();
-  }
-  ctx.strokeStyle = '#ffe776';
-  ctx.lineWidth = 3;
-  ctx.setLineDash([3, 8]);
-  rectangle(room.left, room.top, room.right, room.bottom);
-  ctx.setLineDash([]);
-  if (wall && impact > 0) {
-    const sides = {
-      left: [room.left, room.top, room.left, room.bottom],
-      right: [room.right, room.top, room.right, room.bottom],
-      top: [room.left, room.top, room.right, room.top],
-      bottom: [room.left, room.bottom, room.right, room.bottom],
-    };
-    const [ax, ay, bx, by] = sides[wall];
-    ctx.globalAlpha = impact;
-    ctx.lineWidth = 8;
-    ctx.beginPath();
-    ctx.moveTo(ax, ay);
-    ctx.lineTo(bx, by);
-    ctx.stroke();
-  }
-  ctx.restore();
+  drawCube(ctx, selectedCube, room);
+  if (wall && impact > 0) drawCubeImpact(ctx, selectedCube, impactX, impactY, impact);
   ctx.save();
   ctx.translate(x, y);
   ctx.rotate(angle);

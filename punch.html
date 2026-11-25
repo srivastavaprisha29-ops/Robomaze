@@ -13,19 +13,13 @@
   <header class="top"><a href="./"><img src="assets/robot.svg" alt=""> ROBOMAZE</a><a href="./">Back to arcade</a></header>
   <section class="cabinet">
     <div class="bar"><span>◆ &nbsp; ROBO PUNCH</span></div>
-    <div class="dashboard">
+    <div class="dashboard punch-dashboard">
       <div>
         <h2>Flick arena</h2>
         <div class="punch-arena">
           <video id="punch-video" playsinline muted hidden aria-hidden="true"></video>
           <canvas id="punch-stage" width="680" height="420" role="img" aria-label="A robot inside a fixed cubicle. Finger flicks propel it into the walls."></canvas>
         </div>
-        <h3 class="cube-heading" id="cube-heading">Choose your cube</h3>
-        <div id="cube-picker" class="cube-picker" role="group" aria-labelledby="cube-heading"></div>
-        <details class="cast-picker">
-          <summary>Choose your robot</summary>
-          <div id="robot-cast" class="cube-picker" role="group" aria-label="Robot characters"></div>
-        </details>
       </div>
       <aside>
         <h3>Flick controls</h3>
@@ -40,6 +34,14 @@
         <label for="punch-power">Last hit power <output id="punch-value">0%</output></label>
         <progress id="punch-power" class="punch-meter" max="100" value="0"></progress>
       </aside>
+      <div class="punch-customize">
+        <h3 class="cube-heading" id="cube-heading">Choose your cube</h3>
+        <div id="cube-picker" class="cube-picker" role="group" aria-labelledby="cube-heading"></div>
+        <details class="cast-picker">
+          <summary>Choose your robot</summary>
+          <div id="robot-cast" class="cube-picker" role="group" aria-label="Robot characters"></div>
+        </details>
+      </div>
     </div>
   </section>
 </main>

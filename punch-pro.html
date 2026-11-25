@@ -13,19 +13,13 @@
   <header class="top"><a href="./"><img src="assets/robot.svg" alt=""> ROBOMAZE</a><a href="punch.html">Classic Punch</a></header>
   <section class="cabinet pro-cabinet">
     <div class="bar"><span>◆ &nbsp; ROBO PUNCH PRO</span></div>
-    <div class="dashboard">
+    <div class="dashboard punch-dashboard">
       <div class="pro-display">
         <div class="punch-arena pro-stage">
           <video id="pro-video" playsinline muted hidden aria-hidden="true"></video>
           <canvas id="pro-canvas" width="760" height="560" tabindex="0" role="img" aria-label="Rotatable 3D cube with a robot inside. Drag anywhere on the view to rotate."></canvas>
         </div>
         <p class="hint">Drag the view to orbit the cube. On a keyboard, focus the cube and use the arrow keys.</p>
-        <h3 id="pro-material-label">Cube design</h3>
-        <div id="pro-materials" class="cube-picker" role="group" aria-labelledby="pro-material-label"></div>
-        <details class="cast-picker">
-          <summary>Choose your robot</summary>
-          <div id="robot-cast" class="cube-picker" role="group" aria-label="Robot characters"></div>
-        </details>
       </div>
       <aside>
         <h3>Flick controls</h3>
@@ -47,6 +41,14 @@
           <p id="strike-result" class="hint" role="status">Flick to launch the marker.</p>
         </div>
       </aside>
+      <div class="punch-customize">
+        <h3 id="pro-material-label">Cube design</h3>
+        <div id="pro-materials" class="cube-picker" role="group" aria-labelledby="pro-material-label"></div>
+        <details class="cast-picker">
+          <summary>Choose your robot</summary>
+          <div id="robot-cast" class="cube-picker" role="group" aria-label="Robot characters"></div>
+        </details>
+      </div>
     </div>
   </section>
 </main>

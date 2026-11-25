@@ -110,3 +110,35 @@ footer{color:var(--muted);margin-top:12px;font-size:8px}footer a{color:var(--min
 #wars-local{margin:12px 0;border:1px solid #8b62ac;border-radius:8px;padding:8px 10px;min-width:0}
 #wars-local button{touch-action:none;user-select:none}
 #wars-local button:active{border-color:var(--yellow);color:var(--yellow)}
+
+.maze-controls{display:grid;justify-items:center;text-align:center;margin:10px 0 0}
+.dpad{grid-template-columns:repeat(3,48px)}
+.dpad button{min-height:48px}
+
+@media(min-width:681px){
+  .punch-dashboard{grid-template-rows:auto 1fr}
+  .punch-dashboard aside{grid-column:2;grid-row:1 / span 2}
+  .punch-customize{grid-column:1}
+  .punch-customize .cube-heading{margin-top:0}
+}
+
+@media(max-width:680px){
+  main{width:calc(100% - 20px);padding-bottom:12px}
+  .top{gap:8px;padding-block:8px}
+  .top a{min-height:44px;letter-spacing:0}
+  .top a:last-child{text-align:right}
+  .bar{padding-inline:10px;flex-wrap:wrap}
+  .dashboard{grid-template-columns:minmax(0,1fr);gap:14px;padding:10px}
+  .dashboard aside{min-width:0}
+  .hint,.camera-label{font-size:13px}
+  button,.dashboard select,.cast-picker summary{min-height:44px}
+  .dashboard select,#routine,#gesture-mode{font-size:16px}
+  .arcade-modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .arcade-modes .primary{min-width:0;padding:12px 7px;min-height:48px}
+  .arcade-modes #start{grid-column:1/-1}
+  .scene img{left:17%}
+  .portal{right:17%}
+  #wars-local .dance-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  #wars-local button{padding:8px 4px}
+  #wars-winner{inset:6% 5% auto;padding:8px;font-size:13px}
+}

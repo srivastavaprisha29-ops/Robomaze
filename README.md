@@ -10,7 +10,7 @@
 
 Start the game using the [local setup](#run-locally).
 
-1. Press **Start Game** to open the control setup.
+1. Press **Enter Maze** to open the control setup.
 2. Press **Enter Maze** and allow webcam access. Choose **Enter with keyboard or touch** for manual play.
 3. Follow the dotted yellow maze drawn over your mirrored camera feed. Guide the robot to the pink portal in **Neon Depot**, **Circuit Garden**, and **Midnight Relay**.
 
@@ -84,3 +84,5 @@ The Pro power tower climbs through green and yellow toward the red bell. Hits at
 ## Robo Wars · Thumb Attack
 
 Two players pick robots, tile arenas, and a move style. Clasp hands with both thumbs up to calibrate the two-hand MediaPipe tracker. A geometric pin estimate must hold for 1.2 seconds to win. Tracking loss resets the pin timer, and referee buttons resolve physical pins the webcam cannot see. The pin rule is adapted from the [World Thumb Wrestling Championships](https://www.thumbwrestling.co.uk/thumb-wrestling-rules).
+
+To play without a camera, hold **A** (Player 1) or **L** (Player 2), or use the on-screen attack buttons. Holding an uncontested attack for 1.2 seconds wins the round. Simultaneous attacks reset the pin hold. Select **New round** for a rematch.

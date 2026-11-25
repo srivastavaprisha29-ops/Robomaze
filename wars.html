@@ -21,7 +21,7 @@
           <canvas id="wars-canvas" width="760" height="440" role="img" aria-label="Two selected robots face off in a tiled arena."></canvas>
           <div id="wars-winner" role="status" hidden></div>
         </div>
-        <p id="wars-status" role="status">Enable the camera to start.</p>
+        <p id="wars-status" role="status">Enable the camera or hold an attack to play.</p>
         <label for="wars-pin">Pin hold</label>
         <progress id="wars-pin" max="1" value="0"></progress>
       </div>
@@ -50,6 +50,14 @@
           <button class="secondary" id="wars-reset" type="button">New round</button>
         </div>
         <p class="hint">Clasp fingers and point both thumbs up to calibrate. Keep both wrists and thumbs visible. Hold a pin for 1.2 seconds to win.</p>
+        <fieldset id="wars-local">
+          <legend>Play without a camera</legend>
+          <p class="hint">Hold A or L, or hold a button below. If both players attack, the pin resets.</p>
+          <div class="dance-actions">
+            <button id="wars-strike-1" type="button">P1 attack (A)</button>
+            <button id="wars-strike-2" type="button">P2 attack (L)</button>
+          </div>
+        </fieldset>
         <details>
           <summary>Referee controls</summary>
           <p class="hint">Use these when a real pin is hidden from the camera.</p>

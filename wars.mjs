@@ -1,7 +1,7 @@
 import { handCamera } from './camera.mjs';
 import { cameraPoint } from './mechanics.mjs';
 import { drawCast } from './punch-cast.mjs';
-import { createThumbWar } from './thumb-war.mjs';
+import { createThumbWar, pinDuration } from './thumb-war.mjs';
 
 const byId=id=>document.getElementById(id);
 const video=byId('wars-video');
@@ -30,6 +30,9 @@ const instructions={
   'thumbs-up':'Raise both thumbs to calibrate.',
   fight:'Fight! Pin the other thumb.',
 };
+const localControls=byId('wars-local');
+const attacks=[new Set(),new Set()];
+let localPin=null, localPinSince=0;
 let cameraLive=false, sample={}, winner=null, wonAt=0, frame;
 
 players.forEach((select,i)=>{
@@ -43,6 +46,7 @@ function status(message){
 function win(player,now){
   if(winner!==null)return;
   winner=player;
+  localControls.disabled=true;
   wonAt=now;
   players.forEach(select=>{select.disabled=true;});
   byId('wars-award-1').disabled=true;
@@ -52,16 +56,40 @@ function win(player,now){
   banner.hidden=false;
   status('Round complete.');
 }
+function clearAttacks(){
+  attacks.forEach(inputs=>inputs.clear());
+  localPin=null;
+}
+
+function updateLocalRound(now){
+  const [first,second]=attacks.map(inputs=>inputs.size>0);
+  const candidate=first===second?null:first?0:1;
+  const wasAttacking=sample.motion?.some(Boolean);
+  if(candidate!==localPin){
+    localPin=candidate;
+    localPinSince=now;
+  }
+  const progress=candidate===null?0:Math.min(1,(now-localPinSince)/pinDuration);
+  sample={motion:[Number(first),Number(second)]};
+  byId('wars-pin').value=progress;
+  if(progress===1)win(candidate,now);
+  else if(candidate!==null)status('Player '+(candidate+1)+' is holding a pin…');
+  else if(first && second)status('Both robots are attacking. Pin reset.');
+  else if(wasAttacking)status('Enable the camera or hold an attack to play.');
+}
+
 function reset(){
+  clearAttacks();
   tracking.reset();
   sample={};
   winner=null;
+  localControls.disabled=camera.active;
   players.forEach(select=>{select.disabled=false;});
   byId('wars-award-1').disabled=false;
   byId('wars-award-2').disabled=false;
   byId('wars-winner').hidden=true;
   byId('wars-pin').value=0;
-  status(cameraLive?instructions.clasp:'Enable the camera to start.');
+  status(cameraLive?instructions.clasp:'Enable the camera or hold an attack to play.');
 }
 
 function tiles(){
@@ -83,6 +111,7 @@ function tiles(){
   }
 }
 function render(now){
+  if(!camera.active && winner===null)updateLocalRound(now);
   ctx.clearRect(0,0,width,height);
   ctx.fillStyle=cameraLive?'#120b224d':'#170d29';
   ctx.fillRect(0,0,width,height);
@@ -106,8 +135,10 @@ function render(now){
           ctx.beginPath();ctx.ellipse(side*(56+ring*29),-5,7,14+ring*4,0,0,Math.PI*2);ctx.stroke();
         }
       } else {
-        ctx.fillRect(side>0?35:-91,move==='kick'?36:-5,56*motion[i]+12,13);
-        ctx.fillRect(side*(42+46*motion[i])-9,move==='kick'?35:-8,19,18);
+        const reach=56*motion[i]+12;
+        const strikeY=move==='kick'?36:-5;
+        ctx.fillRect(side>0?35:-35-reach,strikeY,reach,13);
+        ctx.fillRect(side*(35+reach)-9,strikeY-3,19,18);
       }
     }
     drawCast(ctx,entry,-size/2,-size/2,size);
@@ -135,7 +166,9 @@ const camera=handCamera({
   },
   status:message=>{if(winner===null)status(message);},
   state:state=>{
+    clearAttacks();
     cameraLive=state==='live';
+    localControls.disabled=state!=='off' || winner!==null;
     video.hidden=!cameraLive;
     tracking.reset();
     sample={};
@@ -148,6 +181,44 @@ byId('wars-camera').onclick=()=>camera.active?camera.stop():camera.start();
 byId('wars-reset').onclick=reset;
 byId('wars-award-1').onclick=()=>win(0,performance.now());
 byId('wars-award-2').onclick=()=>win(1,performance.now());
+const attackButtons=[byId('wars-strike-1'),byId('wars-strike-2')];
+attackButtons.forEach((button,i)=>{
+  button.addEventListener('pointerdown',event=>{
+    if(event.button!==0 || localControls.disabled)return;
+    button.setPointerCapture(event.pointerId);
+    attacks[i].add(event.pointerId);
+  });
+  for(const type of ['pointerup','pointercancel','lostpointercapture']){
+    button.addEventListener(type,event=>attacks[i].delete(event.pointerId));
+  }
+  for(const type of ['keydown','keyup']){
+    button.addEventListener(type,event=>{
+      if(!['Space','Enter'].includes(event.code))return;
+      event.preventDefault();
+      if(type==='keyup')attacks[i].delete(event.code);
+      else if(!event.repeat && !localControls.disabled)attacks[i].add(event.code);
+    });
+  }
+  button.addEventListener('blur',()=>{
+    attacks[i].delete('Space');
+    attacks[i].delete('Enter');
+  });
+});
+const attackKeys=['KeyA','KeyL'];
+window.addEventListener('keydown',event=>{
+  const index=attackKeys.indexOf(event.code);
+  if(index<0 || event.repeat || event.ctrlKey || event.metaKey || event.altKey ||
+      localControls.disabled || event.target.closest?.('select, input, textarea, [contenteditable]'))return;
+  attacks[index].add(event.code);
+});
+window.addEventListener('keyup',event=>{
+  const index=attackKeys.indexOf(event.code);
+  if(index>=0)attacks[index].delete(event.code);
+});
+window.addEventListener('blur',clearAttacks);
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden)clearAttacks();
+});
 window.addEventListener('pagehide',()=>{camera.stop();cancelAnimationFrame(frame);});
 window.addEventListener('pageshow',event=>{if(event.persisted)frame=requestAnimationFrame(render);});
 frame=requestAnimationFrame(render);

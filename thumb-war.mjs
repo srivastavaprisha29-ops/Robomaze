@@ -35,24 +35,34 @@ export function createThumbWar() {
     } else if(a[0].x<b[0].x) [a,b]=[b,a]; // Player 1 is on the left of the mirrored view.
     wrists=[a[0],b[0]];
     last=now;
-    const height=[a,b].map(h=>(h[2].y-h[4].y)/Math.max(.03,distance(h[0],h[9],aspect)));
+    const scale=[a,b].map(h=>Math.max(.03,distance(h[0],h[9],aspect)));
+    const pose=[a,b].map((h,i)=>({
+      height:(h[2].y-h[4].y)/scale[i],
+      reach:(h[4].x-h[2].x)*aspect/scale[i],
+    }));
+    const height=pose.map(thumb=>thumb.height);
     const linked=distance(a[9],b[9],aspect)<.23;
     if(!neutral){
-      if(linked && height.every(n=>n>.18))neutral=height;
+      if(linked && height.every(n=>n>.18))neutral=pose;
       else return {phase:linked?'thumbs-up':'clasp',hands:[a,b]};
     }
     if(!linked){resetPin();return {phase:'clasp',hands:[a,b]};}
-    const scale=(distance(a[0],a[9],aspect)+distance(b[0],b[9],aspect))/2;
+    const contactRadius=Math.max(.023,(scale[0]+scale[1])*.16);
     const pressing=(attacker,defender,i,j)=>{
-      const drop=neutral[j]-height[j];
-      return drop>.52 && height[j]<.12 && drop>neutral[i]-height[i]+.28 &&
+      const drop=neutral[j].height-height[j];
+      return drop>.52 && height[j]<.12 && drop>neutral[i].height-height[i]+.28 &&
         attacker[4].y < defender[4].y+.018 &&
-        thumbContact(defender[4],attacker[2],attacker[4],aspect)<Math.max(.023,scale*.32);
+        thumbContact(defender[4],attacker[2],attacker[4],aspect)<contactRadius;
     };
     const candidate=pressing(a,b,0,1)?0:pressing(b,a,1,0)?1:null;
     if(candidate!==pin){pin=candidate;pinSince=now;}
     const progress=pin===null?0:Math.min(1,(now-pinSince)/pinDuration);
-    const motion=height.map((n,i)=>Math.max(0,Math.min(1,(neutral[i]-n)*1.1)));
+    const motion=pose.map((thumb,i)=>{
+      const down=neutral[i].height-thumb.height;
+      const inward=(thumb.reach-neutral[i].reach)*(i===0?-1:1);
+      return Math.min(1,Math.max(0,down,inward)*1.1);
+    });
+    if(candidate!==null)motion[candidate]=1;
     return {phase:pin===null?'fight':'pin',hands:[a,b],motion,pin,progress,winner:progress===1?pin:null};
   }
   return { update, reset };

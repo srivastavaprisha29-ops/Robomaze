@@ -31,11 +31,14 @@ export function handCamera({ video, status, direction, state, mode, hand, rawHan
   function stop(message = 'Camera off') {
     if (session) {
       cancelAnimationFrame(session.frame);
+      session.events.abort();
       session.stream?.getTracks().forEach(track => track.stop());
       session = null;
     }
     resetGesture();
+    video.pause();
     video.srcObject = null;
+    video.hidden = true;
     state('off');
     status(message);
   }
@@ -45,7 +48,7 @@ export function handCamera({ video, status, direction, state, mode, hand, rawHan
       stop('Camera needs HTTPS or localhost. Manual controls are available.');
       return;
     }
-    const run = { frame: 0, stream: null };
+    const run = { frame: 0, stream: null, events: new AbortController() };
     session = run;
     state('loading');
     status('Allow camera access to continue.');
@@ -59,11 +62,23 @@ export function handCamera({ video, status, direction, state, mode, hand, rawHan
       stream.getVideoTracks()[0].addEventListener('ended', () => {
         if (session === run) stop('Camera disconnected. Manual controls are available.');
       });
+      // Keep the preview inline and visible while mobile Safari starts playback.
+      video.muted = true;
+      video.playsInline = true;
       video.srcObject = stream;
+      video.hidden = false;
       await video.play();
       if (session !== run) return;
       status('Loading hand-tracking model…');
       const tracker = await detector();
+      if (session !== run) return;
+      function stopInBackground() {
+        if (document.hidden && session === run) {
+          stop('Camera paused while away. Enable it again to resume.');
+        }
+      }
+      document.addEventListener('visibilitychange', stopInBackground, { signal: run.events.signal });
+      stopInBackground();
       if (session !== run) return;
       state('live');
       let lastFrame = -1;

@@ -142,3 +142,30 @@ footer{color:var(--muted);margin-top:12px;font-size:8px}footer a{color:var(--min
   #wars-local button{padding:8px 4px}
   #wars-winner{inset:6% 5% auto;padding:8px;font-size:13px}
 }
+
+.play-view-toolbar{display:flex;justify-content:flex-end;margin-bottom:8px}
+.play-view-toolbar button{min-height:44px}
+.play-view-locked,.play-view-locked body{overflow:hidden}
+.play-view-active{
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  width:100%;
+  height:100%;
+  padding:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right))
+          max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));
+  background:#10091e;
+}
+.play-view-overlay{position:fixed;inset:0;z-index:1000;height:100vh;height:100dvh}
+.play-view-active .play-view-stage{container-type:size;display:grid;place-items:center;overflow:hidden}
+.play-view-active .play-view-stage>div{
+  width:min(100%,calc((100vh - 170px) * var(--stage-ratio)));
+  width:min(100%,calc(max(0px,100cqh - 4px) * var(--stage-ratio) + 4px));
+}
+.play-view-active .maze-controls{margin:6px 0 0}
+.play-view-active .maze-controls h3,.play-view-active .maze-controls .hint{display:none}
+.play-view-active .dpad{grid-template-columns:repeat(4,48px)}
+.play-view-active .dpad button{grid-column:auto}
+.play-view-active #wars-local{margin:6px 0 0}
+.play-view-active #wars-local .hint{display:none}
+.play-view-active #wars-local .dance-actions{grid-template-columns:repeat(2,minmax(0,1fr));margin:0}
+.play-view-active #wars-local button{min-height:44px}

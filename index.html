@@ -8,6 +8,7 @@
 <link rel="icon" href="assets/robot.svg">
 <link rel="stylesheet" href="style.css">
 <script type="module" src="game.mjs"></script>
+<script type="module" src="fullscreen.mjs"></script>
 </head>
 <body>
 <main>
@@ -52,23 +53,30 @@
       <div>
         <h2 id="level-name" tabindex="-1"></h2>
         <div class="hud"><span>STEPS <b id="steps">00</b></span><span>TIME <b id="time">00:00</b></span></div>
-        <div class="board" id="board">
-          <video id="video" playsinline muted hidden aria-hidden="true"></video>
-          <canvas id="maze" role="img" aria-label="Maze board"></canvas>
-          <canvas id="strings" aria-hidden="true"></canvas>
-          <div class="overlay" id="clear" hidden>
-            <div><h2 id="result"></h2><p id="summary"></p><button class="primary" id="next"></button></div>
+        <div class="play-view">
+          <div class="play-view-toolbar" hidden>
+            <button class="secondary" type="button">Fullscreen</button>
+          </div>
+          <div class="play-view-stage">
+            <div class="board" id="board">
+              <video id="video" playsinline muted hidden aria-hidden="true"></video>
+              <canvas id="maze" role="img" aria-label="Maze board"></canvas>
+              <canvas id="strings" aria-hidden="true"></canvas>
+              <div class="overlay" id="clear" hidden>
+                <div><h2 id="result"></h2><p id="summary"></p><button class="primary" id="next"></button></div>
+              </div>
+            </div>
+          </div>
+          <div class="maze-controls">
+            <h3>Manual controls</h3>
+            <div class="dpad">
+              <button data-dir="up" aria-label="Up">↑</button><button data-dir="left" aria-label="Left">←</button>
+              <button data-dir="down" aria-label="Down">↓</button><button data-dir="right" aria-label="Right">→</button>
+            </div>
+            <p class="hint">Arrow keys or WASD</p>
           </div>
         </div>
         <div class="under"><span>◆ Portal</span><button class="secondary" id="reset">Restart level</button></div>
-        <div class="maze-controls">
-        <h3>Manual controls</h3>
-        <div class="dpad">
-          <button data-dir="up" aria-label="Up">↑</button><button data-dir="left" aria-label="Left">←</button>
-          <button data-dir="down" aria-label="Down">↓</button><button data-dir="right" aria-label="Right">→</button>
-        </div>
-        <p class="hint">Arrow keys or WASD</p>
-        </div>
       </div>
       <aside>
         <h3>Hand tracker</h3>

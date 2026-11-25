@@ -7,6 +7,7 @@
 <link rel="icon" href="assets/robot.svg">
 <link rel="stylesheet" href="style.css">
 <script type="module" src="punch.mjs"></script>
+<script type="module" src="fullscreen.mjs"></script>
 </head>
 <body>
 <main>
@@ -16,9 +17,16 @@
     <div class="dashboard punch-dashboard">
       <div>
         <h2>Flick arena</h2>
-        <div class="punch-arena">
-          <video id="punch-video" playsinline muted hidden aria-hidden="true"></video>
-          <canvas id="punch-stage" width="680" height="420" role="img" aria-label="A robot inside a fixed cubicle. Finger flicks propel it into the walls."></canvas>
+        <div class="play-view">
+          <div class="play-view-toolbar" hidden>
+            <button class="secondary" type="button">Fullscreen</button>
+          </div>
+          <div class="play-view-stage">
+            <div class="punch-arena">
+              <video id="punch-video" playsinline muted hidden aria-hidden="true"></video>
+              <canvas id="punch-stage" width="680" height="420" role="img" aria-label="A robot inside a fixed cubicle. Finger flicks propel it into the walls."></canvas>
+            </div>
+          </div>
         </div>
       </div>
       <aside>

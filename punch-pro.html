@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="assets/robot.svg">
 <script type="module" src="punch-pro.mjs"></script>
+<script type="module" src="fullscreen.mjs"></script>
 </head>
 <body>
 <main>
@@ -15,9 +16,16 @@
     <div class="bar"><span>◆ &nbsp; ROBO PUNCH PRO</span></div>
     <div class="dashboard punch-dashboard">
       <div class="pro-display">
-        <div class="punch-arena pro-stage">
-          <video id="pro-video" playsinline muted hidden aria-hidden="true"></video>
-          <canvas id="pro-canvas" width="760" height="560" tabindex="0" role="img" aria-label="Rotatable 3D cube with a robot inside. Drag anywhere on the view to rotate."></canvas>
+        <div class="play-view">
+          <div class="play-view-toolbar" hidden>
+            <button class="secondary" type="button">Fullscreen</button>
+          </div>
+          <div class="play-view-stage">
+            <div class="punch-arena pro-stage">
+              <video id="pro-video" playsinline muted hidden aria-hidden="true"></video>
+              <canvas id="pro-canvas" width="760" height="560" tabindex="0" role="img" aria-label="Rotatable 3D cube with a robot inside. Drag anywhere on the view to rotate."></canvas>
+            </div>
+          </div>
         </div>
         <p class="hint">Drag the view to orbit the cube. On a keyboard, focus the cube and use the arrow keys.</p>
       </div>

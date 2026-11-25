@@ -7,6 +7,7 @@
 <link rel="icon" href="assets/robot.svg">
 <link rel="stylesheet" href="style.css">
 <script type="module" src="wars.mjs"></script>
+<script type="module" src="fullscreen.mjs"></script>
 </head>
 <body>
 <main>
@@ -16,22 +17,29 @@
     <div class="dashboard">
       <div>
         <h2>Thumb Attack</h2>
-        <div class="punch-arena wars-stage">
-          <video id="wars-video" playsinline muted hidden aria-hidden="true"></video>
-          <canvas id="wars-canvas" width="760" height="440" role="img" aria-label="Two selected robots face off in a tiled arena."></canvas>
-          <div id="wars-winner" role="status" hidden></div>
+        <div class="play-view">
+          <div class="play-view-toolbar" hidden>
+            <button class="secondary" type="button">Fullscreen</button>
+          </div>
+          <div class="play-view-stage">
+            <div class="punch-arena wars-stage">
+              <video id="wars-video" playsinline muted hidden aria-hidden="true"></video>
+              <canvas id="wars-canvas" width="760" height="440" role="img" aria-label="Two selected robots face off in a tiled arena."></canvas>
+              <div id="wars-winner" role="status" hidden></div>
+            </div>
+          </div>
+          <fieldset id="wars-local">
+            <legend>Play without a camera</legend>
+            <p class="hint">Hold A or L, or hold a button below. If both players attack, the pin resets.</p>
+            <div class="dance-actions">
+              <button id="wars-strike-1" type="button">P1 attack (A)</button>
+              <button id="wars-strike-2" type="button">P2 attack (L)</button>
+            </div>
+          </fieldset>
         </div>
         <p id="wars-status" role="status">Enable the camera or hold an attack to play.</p>
         <label for="wars-pin">Pin hold</label>
         <progress id="wars-pin" max="1" value="0"></progress>
-        <fieldset id="wars-local">
-          <legend>Play without a camera</legend>
-          <p class="hint">Hold A or L, or hold a button below. If both players attack, the pin resets.</p>
-          <div class="dance-actions">
-            <button id="wars-strike-1" type="button">P1 attack (A)</button>
-            <button id="wars-strike-2" type="button">P2 attack (L)</button>
-          </div>
-        </fieldset>
       </div>
       <aside>
         <h3>Set up the match</h3>

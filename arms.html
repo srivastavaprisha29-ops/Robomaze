@@ -7,6 +7,7 @@
 <link rel="icon" href="assets/robot.svg">
 <link rel="stylesheet" href="style.css">
 <script type="module" src="arms.mjs"></script>
+<script type="module" src="fullscreen.mjs"></script>
 </head>
 <body>
 <main>
@@ -16,9 +17,16 @@
     <div class="dashboard">
       <div>
         <h2>Robot dance stage</h2>
-        <div class="dance-stage">
-          <video id="dance-video" playsinline muted hidden aria-hidden="true"></video>
-          <canvas id="dance-canvas" width="800" height="480" role="img" aria-label="A purple robot with moving arms and legs. With tracking enabled, yellow strings link five fingertips to the robot."></canvas>
+        <div class="play-view">
+          <div class="play-view-toolbar" hidden>
+            <button class="secondary" type="button">Fullscreen</button>
+          </div>
+          <div class="play-view-stage">
+            <div class="dance-stage">
+              <video id="dance-video" playsinline muted hidden aria-hidden="true"></video>
+              <canvas id="dance-canvas" width="800" height="480" role="img" aria-label="A purple robot with moving arms and legs. With tracking enabled, yellow strings link five fingertips to the robot."></canvas>
+            </div>
+          </div>
         </div>
       </div>
       <aside>
